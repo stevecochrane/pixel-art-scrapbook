@@ -67,51 +67,61 @@ App.DragAndDropView = Ember.View.extend({
     //  since base64-encoded images are typically 33% larger. I just did it this way for this prototype
     //  since it was the fastest to implement.
 
-    dragEnter: function(evt) {
-        evt.stopPropagation();
-        evt.preventDefault();
-        evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
+    //  This will bind the elements class to the isDragActive variable on the view.
+    //  If isDragActive is true, the class "drag-active" will be added. If false, the class is removed.
+    classNameBindings: [':dnd-area', 'isDragActive:drag-active', 'hasImage:has-image'],
+    isDragActive: false,
+    hasImage: false,
+    tagName: 'div',
 
-        //  A bit of a hack since I couldn't figure out in time how to change classes the Ember way.
-        $('#dnd-area').addClass('drag-active');
-    },
-    dragLeave: function(evt) {
-        evt.stopPropagation();
-        evt.preventDefault();
-        $('#dnd-area').removeClass('drag-active');
-    },
-    dragOver: function(evt) {
-        //  Seems unnecessary but drag and drop won't work in Chrome and Firefox without preventing this event.
-        evt.stopPropagation();
-        evt.preventDefault();        
-    },
-    drop: function(evt) {
-        evt.stopPropagation();
-        evt.preventDefault();
-
-        var files = evt.dataTransfer.files, // FileList object.
-            FR = new FileReader(),
-            imgEncoded,
-            $dndArea = $('#dnd-area');
-
-        FR.onload = function(e) {
-            imgEncoded = e.target.result;
-            //  Now we have the encoded image, so we'll store it in an invisible input
-            //  until the form is submitted. This is a bit of a hack for now and it would be better 
-            //  to do it the Ember way. Maybe next time.
-            $('#img-data').val(imgEncoded);
-            //  First, if they've already dropped an image, remove it.
-            $dndArea.find('img').remove();
-            //  Now remove the active class and add the image to the page.
-            $dndArea
-                .removeClass('drag-active')
-                .addClass('has-image')
-                .append('<img src="' + imgEncoded + '">');
-        };
-        FR.readAsDataURL(files[0]);
-
-    },
-    tagName: 'div'
+    eventManager: Ember.Object.create({
+        dragEnter: function(event, view) {
+            event.stopPropagation();
+            event.preventDefault();
+            event.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
+    
+            //  Set isDragActive to true to turn the drag and drop area green
+            view.set('isDragActive', true);
+        },
+        dragLeave: function(event, view) {
+            event.stopPropagation();
+            event.preventDefault();
+    
+            //  Bring the drag and drop area's appearance back to normal.
+            view.set('isDragActive', false);
+        },
+        dragOver: function(event, view) {
+            //  Seems unnecessary but drag and drop won't work in Chrome and Firefox without preventing this event.
+            event.stopPropagation();
+            event.preventDefault();        
+        },
+        drop: function(event, view) {
+            event.stopPropagation();
+            event.preventDefault();
+    
+            var files = event.dataTransfer.files, // FileList object.
+                FR = new FileReader();
+    
+            FR.onload = function(frEvent) {
+                //  frEvent.target.result is the image that was just dragged and dropped, encoded in base64.
+                //  Now that we have the encoded image we'll store it in a hidden input element, #img-data,
+                //  for use later when the form is submitted.
+                $('#img-data').val(frEvent.target.result);
+                //  Now we'll add the image that was dropped to the page so it can be previewed.
+                //  First, select this view's element with jQuery
+                $('#' + view.get('elementId'))
+                    //  Empty its contents (in case there is already an image being previewed)
+                    .empty()
+                    //  Then, append a new preview of the image that was just dropped in.
+                    .append('<img src="' + frEvent.target.result + '">')
+                //  Finally, set isDragActive to false to remove the green highlighting and set hasImage to true 
+                //  to add some styles for when there is an image inside.
+                view.set('isDragActive', false);
+                view.set('hasImage', true);
+            };
+            FR.readAsDataURL(files[0]);
+        }
+    })
 });
 
 App.ApplicationController = Ember.ObjectController.extend({
@@ -133,19 +143,23 @@ App.ApplicationController = Ember.ObjectController.extend({
 
 App.ScrapController = Ember.ObjectController.extend({
     isEditing: false,
+    tagsRollback: null,
 
     actions: {
-        edit: function() {
+        edit: function(scrap) {
             this.set('isEditing', true);
+            tagsRollback = scrap.tags;
         },
         save: function(scrap) {
             this.set('isEditing', false);
         },
-        cancel: function() {
+        cancel: function(scrap) {
             this.set('isEditing', false);
+            Ember.set(scrap, 'tags', tagsRollback);
         },
         remove: function(scrap) {
-            this.set('isEditing', false);
+            //  Delete is disabled for this front-end-only version so in this case we just 
+            //  redirect back to the index view.
             this.transitionToRoute('index');
         }
     }

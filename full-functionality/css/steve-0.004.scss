@@ -43,6 +43,13 @@
     }
 }
 
+@mixin linear-gradient($gradient) {
+    background-image: -webkit-linear-gradient($gradient);
+    background-image: -moz-linear-gradient($gradient);
+    background-image: -ms-linear-gradient($gradient);
+    background-image: linear-gradient($gradient);
+}
+
 @mixin nearest-neighbor {
 	image-rendering: -webkit-optimize-contrast;
 	image-rendering: -moz-crisp-edges;

@@ -9,14 +9,14 @@
     <body>
 
         <script type="text/x-handlebars">
-            <header>
+            <header class="app-header">
                 <h1>{{#link-to 'index'}}Pixel Art Scrapbook{{/link-to}}</h1>
-                <div class="header-actions">
+                <div class="app-header-actions">
                     {{#link-to 'upload' class="button button-add"}}Add a New Image{{/link-to}}
                     {{view App.SearchTextField class="search" targetAction="search"}}
                 </div>
             </header>
-            <div id="main" role="main">
+            <div class="container">
                 {{outlet}}
             </div>
         </script>
@@ -47,7 +47,7 @@
                     {{#link-to 'index'}}&larr; back to all images{{/link-to}}
                 </div>
                 <h2>Add a New Image</h2>
-                {{view App.DragAndDropView id="dnd-area" targetAction="processImage"}}
+                {{view App.DragAndDropView targetAction="processImage"}}
                 {{input type="hidden" id="img-data" value=img}}
                 {{textarea class="tags-field" value=tags placeholder="Add tags here, separated by commas"}}
                 <p class="note">Note: adding new images is disabled for this demo. New images will not be displayed.</p>
@@ -68,13 +68,13 @@
                     {{textarea class="tags-field" value=tags placeholder="Add tags here, separated by commas"}}
                     <div class="form-actions">
                         <button class="button" {{action 'save' this}}>Save Changes</button>
-                        <button class="button" {{action 'cancel'}}>Cancel</button>
+                        <button class="button" {{action 'cancel' this}}>Cancel</button>
                     </div>
                 {{else}}
                     <p class="tags-list">{{{this.tags}}}</p>
                     <p class="note">Note: delete is disabled for this demo.</p>
                     <div class="form-actions">
-                        <button class="button" {{action 'edit'}}>Edit</button>
+                        <button class="button" {{action 'edit' this}}>Edit</button>
                         <button class="button" {{action 'remove' this}}>Delete</button>
                     </div>
                 {{/if}}
