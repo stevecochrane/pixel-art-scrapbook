@@ -60,7 +60,7 @@ a {
 .button-add:focus {
     border-color: #3f6f73;
 }
-.button-add:after {
+.button-add:before {
     background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAAOCAQAAABedl5ZAAAAJUlEQVR4AWNAgP8QwACDDHAmPaRwAjKlGBxgECKA4A+Ql9EtBwAYLuFid4iwLQAAAABJRU5ErkJggg%3D%3D); /* ../img/plus-icon.png */
     content: '';
     display: block;
@@ -175,7 +175,7 @@ a {
     position: relative;
     @include transition(all 0.4s);
 }
-.dnd-area:after {
+.dnd-area:before {
     color: #aaa;
     content: 'Drag and drop an image here';
     font-size: em(18, $small-font-size);
@@ -186,7 +186,7 @@ a {
     top: 50%;
     width: 50%;
 }
-.dnd-area.has-image:after {
+.dnd-area.has-image:before {
     content: '';
 }
 .dnd-area.drag-active {
@@ -213,7 +213,7 @@ a {
     padding-left: em(14 + ($base-font-size * 0.5), $small-font-size);
     position: relative;
 }
-.tags-list:after {
+.tags-list:before {
     background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAAbUlEQVR42pXLsQmAMBRF0aR3BwVx3DSaCSzcQ53DKSxT6PuFfPBp4BUXbnNC33Z/RZRQQders4byB1jQYa8ga0AzQUKVRORpyCsa8pLBUUQZRYOrilAw2KBdQQ8kXEcOCVcQQ8aMGDLe0OSIuwGn/b3ks9QXYwAAAABJRU5ErkJggg%3D%3D) 0 50% no-repeat; /* ../img/tag-icon.png */
     content: '';
     height: 14px;
