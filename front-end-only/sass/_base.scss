@@ -1,0 +1,16 @@
+$base-font-size: 16;
+$small-font-size: 14;
+$x-small-font-size: 12;
+$base-unit: 24;
+
+@function em($px, $base: $base-font-size) {
+    @return ($px / $base) * 1em;
+}
+
+@function percent($px, $total: $base-font-size) {
+    @return ($px / $total) * 100 + 0.0001%;
+}
+
+@function golden-ratio($px) {
+    @return $px / 1.61803398875;
+}
