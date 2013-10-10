@@ -124,6 +124,7 @@ a {
 .scrap {
     display: inline-block;
     padding: em(10, $base-font-size);
+    text-align: center;
     vertical-align: middle;
     width: em(276, $base-font-size); /* A precise size just for these 256px-wide demo screenshots to look nice */
 }
