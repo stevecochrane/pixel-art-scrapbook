@@ -119,22 +119,13 @@ a {
     float: left;
 }
 .container {
-    margin: 0 auto;
-    max-width: em(1240, $base-font-size);
     padding: em(20, $base-font-size);
-    @include pie-clearfix;
 }
 .scrap {
-    float: left;
+    display: inline-block;
     padding: em(10, $base-font-size);
-    text-align: center;
+    vertical-align: middle;
     width: em(276, $base-font-size); /* A precise size just for these 256px-wide demo screenshots to look nice */
-}
-.scrap:nth-of-type(4n + 1) {
-    /*  Since the scraps are at an uneven height, we'll need to set clear to make sure
-        each row always wraps cleanly. Also since Ember inserts script elements around 
-        the scrap elements here we'll need to use nth-of-type (not nth-child) to select them. */
-    clear: left;
 }
 .scrap a {
     background: #fff;
@@ -235,29 +226,4 @@ a {
     line-height: em($base-unit, $small-font-size);
     margin-bottom: 0;
     font-style: italic;
-}
-
-/*  Make sure the scraps continue to wrap cleanly at each possible break point. */
-@media screen and (max-device-width: em(1240, $base-font-size)) and (min-device-width: em(941, $base-font-size)), screen and (max-width: em(1240, $base-font-size)) and (min-width: em(941, $base-font-size)) {
-    .scrap:nth-of-type(n) {
-        clear: none;
-    }
-    .scrap:nth-of-type(3n + 1) {
-        clear: left;
-    }
-}
-@media screen and (max-device-width: em(940, $base-font-size)) and (min-device-width: em(641, $base-font-size)), screen and (max-width: em(940, $base-font-size)) and (min-width: em(641, $base-font-size)) {
-    .scrap:nth-of-type(n) {
-        clear: none;
-    }
-    .scrap:nth-of-type(2n + 1) {
-        clear: left;
-    }
-}
-/*  When we're down to just one image per row, center the images. */
-@media screen and (max-device-width: em(640, $base-font-size)), screen and (max-width: em(640, $base-font-size)) {
-    .scrap {
-        float: none;
-        margin: 0 auto;
-    }
 }
