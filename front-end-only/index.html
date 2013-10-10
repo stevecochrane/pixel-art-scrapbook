@@ -71,7 +71,7 @@
                         <button class="button" {{action 'cancel' this}}>Cancel</button>
                     </div>
                 {{else}}
-                    <p class="tags-list">{{{this.tags}}}</p>
+                    <p class="tags-list">{{{sanitize this.tags}}}</p>
                     <p class="note">Note: delete is disabled for this demo.</p>
                     <div class="form-actions">
                         <button class="button" {{action 'edit' this}}>Edit</button>

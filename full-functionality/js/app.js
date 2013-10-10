@@ -50,7 +50,7 @@ App.SearchTextField = Ember.TextField.extend({
     //  Source for insertNewline: https://www.adobe.com/devnet/html5/articles/flame-on-a-beginners-guide-to-emberjs.html
     //  Source for sendAction and targetAction: http://jsfiddle.net/selvaG/xJZ6Y/5/
     insertNewline: function(){
-        this.sendAction('targetAction', this.get('value'));
+        this.sendAction('targetAction', this.get('value').replace(/(<([^>]+)>)/ig, ""));
     }
 });
 
@@ -154,7 +154,7 @@ App.ScrapController = Ember.ObjectController.extend({
                 dataType: 'JSON',
                 data: {
                     img: scrap.img,
-                    tags: scrap.tags
+                    tags: scrap.tags.replace(/(<([^>]+)>)/ig, "")
                 }
             });
         },
@@ -189,7 +189,7 @@ App.UploadController = Ember.ObjectController.extend({
                 dataType: 'JSON',
                 data: {
                     img: scrap.img,
-                    tags: scrap.tags
+                    tags: scrap.tags.replace(/(<([^>]+)>)/ig, "")
                 },
                 success: function() {
                     objController.transitionToRoute('index');
@@ -202,4 +202,8 @@ App.UploadController = Ember.ObjectController.extend({
             this.transitionToRoute('index');
         }
     }
+});
+
+Ember.Handlebars.helper('sanitize', function(value, options) {
+    return value.replace(/(<([^>]+)>)/ig, "");
 });
