@@ -50,7 +50,7 @@ App.SearchTextField = Ember.TextField.extend({
     //  Source for insertNewline: https://www.adobe.com/devnet/html5/articles/flame-on-a-beginners-guide-to-emberjs.html
     //  Source for sendAction and targetAction: http://jsfiddle.net/selvaG/xJZ6Y/5/
     insertNewline: function(){
-        this.sendAction('targetAction', this.get('value').replace(/(<([^>]+)>)/ig, ""));
+        this.sendAction('targetAction', this.get('value').replace(/(<([^>]+)>)/ig, ''));
     }
 });
 
@@ -126,7 +126,7 @@ App.ApplicationController = Ember.ObjectController.extend({
             //  Check if something has been entered into the search field.
             //  Ember returns the textfield object if there isn't a value, so instead of just "if (searchTerm)"
             //  we'll check if searchTerm is a string. If so, then something was entered, if not, it's empty.
-            if (typeof searchTerm == "string") {
+            if (typeof searchTerm == 'string') {
                 //  If so, go to the search view for the entered search term
                 this.transitionToRoute('search', searchTerm);
             } else {
@@ -154,7 +154,7 @@ App.ScrapController = Ember.ObjectController.extend({
                 dataType: 'JSON',
                 data: {
                     img: scrap.img,
-                    tags: scrap.tags.replace(/(<([^>]+)>)/ig, "")
+                    tags: scrap.tags.replace(/(<([^>]+)>)/ig, '')
                 }
             });
         },
@@ -189,7 +189,7 @@ App.UploadController = Ember.ObjectController.extend({
                 dataType: 'JSON',
                 data: {
                     img: scrap.img,
-                    tags: scrap.tags.replace(/(<([^>]+)>)/ig, "")
+                    tags: scrap.tags.replace(/(<([^>]+)>)/ig, '')
                 },
                 success: function() {
                     objController.transitionToRoute('index');
@@ -205,5 +205,34 @@ App.UploadController = Ember.ObjectController.extend({
 });
 
 Ember.Handlebars.helper('sanitize', function(value, options) {
-    return value.replace(/(<([^>]+)>)/ig, "");
+    return value.replace(/(<([^>]+)>)/ig, '');
+});
+
+//  Two helpers combined, since as far as I know you can only use one helper at a time.
+Ember.Handlebars.helper('sanitizeAndWrapLinks', function(value, options) {
+    var valueModified, valueArray, valueArrayLength;
+    //  First, sanitize the provided value to remove any HTML.
+    valueModified = value.replace(/(<([^>]+)>)/ig, '');
+    //  If there are spaces after commas, remove them. 
+    //  This will still preserve spaces between tag names.
+    //  Ex. "tag one, tag two, tag three" becomes "tag one,tag two,tag three"
+    valueModified = valueModified.replace(/, /g, ',');
+    //  Then use split to create a new array of the listed tags.
+    valueArray = valueModified.split(',');
+    //  Then loop through each entry in the array and wrap each one in an anchor element.
+    //  These links will point to a search query for the tag.
+    //  This is maybe a little hacky since the ideal way to generate the href would be to 
+    //  work within Ember's routes rather than hard-code '#/search/' into the URL.
+    valueArrayLength = valueArray.length;
+    for (var i = 0; i < valueArrayLength; i += 1) {
+        valueArray[i] = '<a href="#/search/' + encodeURIComponent(valueArray[i]) + '">' + valueArray[i] + '</a>';
+        //  Add a comma and space after each one unless we're on the last tag, to separate the links.
+        if (i < valueArrayLength - 1) {
+            valueArray[i] += ', ';
+        }
+    }
+    //  Then join the array back into a string.
+    valueModified = valueArray.join('');
+    //  Finally, return the result as a safe string so the HTML is preserved.
+    return new Handlebars.SafeString(valueModified);
 });

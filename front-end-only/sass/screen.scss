@@ -28,8 +28,13 @@ img {
     max-width: 100%;
 }
 a {
+    color: inherit;
     text-decoration: none;
     @include transition(all 0.2s);
+}
+a:hover,
+a:focus {
+    color: #6aa8ae;
 }
 .button {
     @include background(#6118ae linear-gradient(#80b5ba, #57999f));
@@ -48,6 +53,7 @@ a {
 .button:focus {
     @include background-image(linear-gradient(#6aa8ae, #518e94));
     border-color: #45797e;
+    color: #fff;
 }
 .button-add {
     border-color: #45797e;
