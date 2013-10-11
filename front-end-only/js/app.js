@@ -35,8 +35,10 @@ App.ScrapRoute = Ember.Route.extend({
 
 App.SearchRoute = Ember.Route.extend({
     model: function(params) {
-        //  Uses regex to return any results that have even a partial match for the search term
-        var regex = new RegExp(params.search_term, 'i');
+        //  Uses regex to return any results that have even a partial match for the search term.
+        //  Decode is needed here since if the user has clicked on a tag link or entered the URL manually,
+        //  the search_term will have encoded spaces in it if the tag has more than one word.
+        var regex = new RegExp(decodeURIComponent(params.search_term), 'i');
         return scraps.filter(function(currentScrap) {
             return regex.test(currentScrap.tags);
         });
