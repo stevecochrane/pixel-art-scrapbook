@@ -70,11 +70,11 @@ a:focus {
     background: inline-image('plus-icon.png');
     content: '';
     display: block;
-    height: 14px;
+    height: image-height('plus-icon.png');
     left: em(12, $x-small-font-size);
     position: absolute;
     top: em(8, $x-small-font-size);
-    width: 13px;
+    width: image-width('plus-icon.png');
 }
 .search {
     background: #45797e inline-image('search-icon.png') no-repeat em(12, $x-small-font-size) em(7, $x-small-font-size);
@@ -214,12 +214,12 @@ a:focus {
 .tags-list:before {
     background: inline-image('tag-icon.png') 0 50% no-repeat;
     content: '';
-    height: 14px;
+    height: image-height('tag-icon.png');
     left: 0;
     opacity: 0.8;
     position: absolute;
     top: em(($base-unit - 14) / 2, $small-font-size);
-    width: 14px;
+    width: image-width('tag-icon.png');
 }
 .form-actions {
     padding: em(20, $small-font-size) 0 em(8, $small-font-size);
