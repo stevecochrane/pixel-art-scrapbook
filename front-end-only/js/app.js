@@ -115,7 +115,7 @@ App.DragAndDropView = Ember.View.extend({
                     //  Empty its contents (in case there is already an image being previewed)
                     .empty()
                     //  Then, append a new preview of the image that was just dropped in.
-                    .append('<img src="' + frEvent.target.result + '">')
+                    .append('<img src="' + frEvent.target.result + '">');
                 //  Finally, set isDragActive to false to remove the green highlighting and set hasImage to true 
                 //  to add some styles for when there is an image inside.
                 view.set('isDragActive', false);
