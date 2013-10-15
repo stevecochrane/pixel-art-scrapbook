@@ -31,10 +31,11 @@ a {
     color: inherit;
     text-decoration: none;
     @include transition(all 0.2s);
-}
-a:hover,
-a:focus {
-    color: #6aa8ae;
+
+    &:hover,
+    &:focus {
+        color: #6aa8ae;
+    }
 }
 .button {
     @include background(#6118ae linear-gradient(#80b5ba, #57999f));
@@ -48,12 +49,13 @@ a:focus {
     line-height: em(22, $small-font-size);
     padding: em(4, $small-font-size) em(16, $small-font-size);
     text-shadow: 0 1px 0 rgba(#000, 0.35);
-}
-.button:hover,
-.button:focus {
-    @include background-image(linear-gradient(#6aa8ae, #518e94));
-    border-color: #45797e;
-    color: #fff;
+
+    &:hover,
+    &:focus {
+        @include background-image(linear-gradient(#6aa8ae, #518e94));
+        border-color: #45797e;
+        color: #fff;
+    }
 }
 .button-add {
     border-color: #45797e;
@@ -61,20 +63,22 @@ a:focus {
     line-height: em(22, $x-small-font-size);
     padding: em(4, $x-small-font-size) em(16, $x-small-font-size) em(4, $x-small-font-size) em(32, $x-small-font-size);
     position: relative;
-}
-.button-add:hover,
-.button-add:focus {
-    border-color: #3f6f73;
-}
-.button-add:before {
-    background: inline-image('plus-icon.png');
-    content: '';
-    display: block;
-    height: image-height('plus-icon.png');
-    left: em(12, $x-small-font-size);
-    position: absolute;
-    top: em(8, $x-small-font-size);
-    width: image-width('plus-icon.png');
+
+    &:hover,
+    &:focus {
+        border-color: #3f6f73;
+    }
+
+    &:before {
+        background: inline-image('plus-icon.png');
+        content: '';
+        display: block;
+        height: image-height('plus-icon.png');
+        left: em(12, $x-small-font-size);
+        position: absolute;
+        top: em(8, $x-small-font-size);
+        width: image-width('plus-icon.png');
+    }
 }
 .search {
     background: #45797e inline-image('search-icon.png') no-repeat em(12, $x-small-font-size) em(7, $x-small-font-size);
@@ -87,9 +91,10 @@ a:focus {
     padding: em(8, $x-small-font-size) em(16, $x-small-font-size) em(8, $x-small-font-size) em(32, $x-small-font-size);
     position: relative;
     text-shadow: 0 1px 0 rgba(#000, 0.25);
-}
-.search:focus {
-    outline: none;
+
+    &:focus {
+        outline: none;
+    }
 }
 .app-header {
     background: #6aa8ae inline-image('header-background.png');
@@ -97,15 +102,16 @@ a:focus {
     padding: em(($base-unit / 2), $base-font-size) em($base-unit, $base-font-size);
     position: relative;
     @include pie-clearfix;
-}
-.app-header:before {
-    @include background-image(linear-gradient(rgba(#000, 0), rgba(#000, 0.1)));
-    bottom: 0;
-    content: '';
-    left: 0;
-    position: absolute;
-    right: 0;
-    top: 0;
+
+    &:before {
+        @include background-image(linear-gradient(rgba(#000, 0), rgba(#000, 0.1)));
+        bottom: 0;
+        content: '';
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
 }
 .app-header h1 {
     margin: 0;
@@ -160,10 +166,11 @@ a:focus {
 .back-link a {
     color: rgba(#000, 0.35);
     float: left;
-}
-.back-link a:hover,
-.back-link a:focus {
-    color: rgba(#000, 0.7);
+
+    &:hover,
+    &:focus {
+        color: rgba(#000, 0.7);
+    }
 }
 .dnd-area {
     background: rgba(#000, 0.035);
@@ -172,17 +179,18 @@ a:focus {
     padding: em($base-unit - 4, $small-font-size);
     position: relative;
     @include transition(all 0.4s);
-}
-.dnd-area:before {
-    color: #aaa;
-    content: 'Drag and drop an image here';
-    font-size: em(18, $small-font-size);
-    left: 50%;
-    margin: em(-$base-unit * 0.5, 18) 0 0 -25%;
-    position: absolute;
-    text-align: center;
-    top: 50%;
-    width: 50%;
+
+    &:before {
+        color: #aaa;
+        content: 'Drag and drop an image here';
+        font-size: em(18, $small-font-size);
+        left: 50%;
+        margin: em(-$base-unit * 0.5, 18) 0 0 -25%;
+        position: absolute;
+        text-align: center;
+        top: 50%;
+        width: 50%;
+    }
 }
 .dnd-area.has-image:before {
     content: '';
@@ -210,16 +218,17 @@ a:focus {
     margin: em($base-unit * 0.5, $small-font-size) 0;
     padding-left: em(14 + ($base-font-size * 0.5), $small-font-size);
     position: relative;
-}
-.tags-list:before {
-    background: inline-image('tag-icon.png') 0 50% no-repeat;
-    content: '';
-    height: image-height('tag-icon.png');
-    left: 0;
-    opacity: 0.8;
-    position: absolute;
-    top: em(($base-unit - 14) / 2, $small-font-size);
-    width: image-width('tag-icon.png');
+
+    &:before {
+        background: inline-image('tag-icon.png') 0 50% no-repeat;
+        content: '';
+        height: image-height('tag-icon.png');
+        left: 0;
+        opacity: 0.8;
+        position: absolute;
+        top: em(($base-unit - 14) / 2, $small-font-size);
+        width: image-width('tag-icon.png');
+    }
 }
 .form-actions {
     padding: em(20, $small-font-size) 0 em(8, $small-font-size);
