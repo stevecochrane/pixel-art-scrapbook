@@ -1,15 +1,4 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title>Pixel Art Scrapbook</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="css/screen.css">
-    </head>
-    <body>
-
-        <script type="text/x-handlebars">
-            <header class="app-header">
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Pixel Art Scrapbook</title><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="css/screen.css"></head><body><script type="text/x-handlebars"><header class="app-header">
                 <h1>{{#link-to 'index'}}Pixel Art Scrapbook{{/link-to}}</h1>
                 <div class="app-header-actions">
                     {{#link-to 'upload' class="button button-add"}}Add a New Image{{/link-to}}
@@ -18,19 +7,7 @@
             </header>
             <div class="container">
                 {{outlet}}
-            </div>
-        </script>
-
-        <script type="text/x-handlebars" data-template-name="index">
-            {{partial 'list'}}
-        </script>
-
-        <script type="text/x-handlebars" data-template-name="search">
-            {{partial 'list'}}
-        </script>
-
-        <script type="text/x-handlebars" data-template-name="_list">
-            <ul>
+            </div></script><script type="text/x-handlebars" data-template-name="index">{{partial 'list'}}</script><script type="text/x-handlebars" data-template-name="search">{{partial 'list'}}</script><script type="text/x-handlebars" data-template-name="_list"><ul>
                 {{#each model}}
                     <li class="scrap">
                         {{#link-to 'scrap' this.id}}
@@ -38,11 +15,7 @@
                         {{/link-to}}
                     </li>
                 {{/each}}
-            </ul>
-        </script>
-
-        <script type="text/x-handlebars" data-template-name="upload">
-            <div class="form-wrap">
+            </ul></script><script type="text/x-handlebars" data-template-name="upload"><div class="form-wrap">
                 <div class="back-link">
                     {{#link-to 'index'}}&larr; back to all images{{/link-to}}
                 </div>
@@ -55,11 +28,7 @@
                     <button class="button" {{action 'add' this}}>Add</button>
                     <button class="button" {{action 'cancel'}}>Cancel</button>
                 </div>
-            </div>
-        </script>
-
-        <script type="text/x-handlebars" data-template-name="scrap">
-            <div class="form-wrap">
+            </div></script><script type="text/x-handlebars" data-template-name="scrap"><div class="form-wrap">
                 <div class="back-link">
                     {{#link-to 'index'}}&larr; back to all images{{/link-to}}
                 </div>
@@ -78,9 +47,4 @@
                         <button class="button" {{action 'remove' this}}>Delete</button>
                     </div>
                 {{/if}}
-            </div>
-        </script>
-
-        <script src="dist/pixel-art-scrapbook.min.js"></script>
-    </body>
-</html>
+            </div></script><script src="js/pixel-art-scrapbook.min.js"></script></body></html>
