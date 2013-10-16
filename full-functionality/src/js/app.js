@@ -1,3 +1,12 @@
+/*!
+ * Pixel Art Scrapbook
+ *
+ * Copyright 2013 Steve Cochrane
+ * Released under the MIT license
+ * http://github.com/stevecochrane/pixel-art-scrapbook/
+ *
+ */
+
 //  Most of this was picked up from the "Building an Ember.js Application" tutorial video,
 //  so if you want to learn Ember, start here! http://emberjs.com/guides/
 

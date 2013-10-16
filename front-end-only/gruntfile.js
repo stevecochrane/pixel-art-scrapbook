@@ -34,9 +34,10 @@ module.exports = function(grunt) {
         //  Lint test the JavaScript. (Only the new JS for this app, frameworks not included.)
         jshint: {
             //  Define the files to lint.
+            //  Since I didn't specify /**/ this will ignore anything in src/js/libs/
             files: [
                 'gruntfile.js',
-                'src/js/app.js'
+                'src/js/*.js'
             ]
         },
 
@@ -63,8 +64,13 @@ module.exports = function(grunt) {
 
         //  Minify the concatenated JavaScript file.
         uglify: {
+            options: {
+                //  Keep any loud comments (starting with /*!) to preserve licenses.
+                preserveComments: 'some'
+            },
             dist: {
                 files: {
+                    //  Take the concatendated file output from concat and minify it.
                     'dist/js/<%= pkg.name %>.min.js': ['<%= concat.dist.dest %>']
                 }
             }

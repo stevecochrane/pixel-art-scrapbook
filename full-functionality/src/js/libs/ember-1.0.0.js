@@ -1,3 +1,14 @@
+/*!
+   ==========================================================================
+   Project:   Ember - JavaScript Application Framework
+   Copyright: Â©2011-2013 Tilde Inc. and contributors
+              Portions Â©2006-2011 Strobe Inc.
+              Portions Â©2008-2011 Apple Inc. All rights reserved.
+   License:   Licensed under MIT license
+              See https://raw.github.com/emberjs/ember.js/master/LICENSE
+   ==========================================================================
+*/
+
 // Version: v1.0.0
 // Last commit: e2ea0cf (2013-08-31 23:47:39 -0700)
 
