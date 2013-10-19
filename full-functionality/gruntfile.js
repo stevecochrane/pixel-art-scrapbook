@@ -108,6 +108,11 @@ module.exports = function(grunt) {
             }
         },
 
+        //  Run QUnit tests
+        qunit: {
+            all: ['test/**/*.html']
+        },
+
         //  Watch certain files and when they change, execute some of the above plugins.
         watch: {
             compass: {
@@ -124,11 +129,12 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-qunit');
     grunt.loadNpmTasks('grunt-contrib-watch');
 
     //  Default task(s), in this case it's to build for distribution/production.
     //  'imagemin' should be run before 'compass' so that Compass can build with the minified images.
     //  Also it's better to test the JS with JSHint before concatenating and compressing.
-    grunt.registerTask('default', ['htmlmin', 'imagemin', 'compass', 'jshint', 'concat', 'uglify']);
+    grunt.registerTask('default', ['htmlmin', 'imagemin', 'compass', 'jshint', 'concat', 'uglify', 'qunit']);
 
 };
