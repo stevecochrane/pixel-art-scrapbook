@@ -3,3 +3,4 @@ design-materials
 node_modules
 *.app
 *.dmg
+!build

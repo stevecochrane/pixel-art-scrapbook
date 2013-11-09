@@ -1,0 +1,10 @@
+## Version 0.01
+#### November 8, 2013
+
+- Initial release!
+- OS X desktop app is built and functional, Windows app forthcoming (just needs testing)
+- You can add new images (by drag and drop), edit existing images, and delete existing images
+- Images only have one piece of meta information so far, tags
+- Clicking on a tag will return a list of images with that tag
+- You can also enter tags into the search field to search for images by tag
+- Images and meta data are stored in the user's Documents directory

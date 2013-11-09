@@ -1,0 +1,20 @@
+#appname:Pixel Art Scrapbook
+#appid:com.stevecochrane.PixelArtScrapbook
+#publisher:Steve Cochrane
+#image:default_app_logo.png
+#url:http://stevecochrane.com/
+#guid:189a3d91-86d4-45c4-a294-bb7ba6d153ab
+#desc:A scrapbook for pixel art
+#type:desktop
+runtime:1.3.1-beta
+app:1.3.1-beta
+codec:1.3.1-beta
+database:1.3.1-beta
+filesystem:1.3.1-beta
+media:1.3.1-beta
+monkey:1.3.1-beta
+network:1.3.1-beta
+platform:1.3.1-beta
+process:1.3.1-beta
+ui:1.3.1-beta
+worker:1.3.1-beta
