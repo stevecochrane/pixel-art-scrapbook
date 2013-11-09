@@ -1,3 +1,5 @@
 design-materials
 .sass-cache
 node_modules
+*.app
+*.dmg
