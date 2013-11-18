@@ -48557,7 +48557,10 @@ App.ScrapController = Ember.ObjectController.extend({
             //  This is less efficient that it could be. Later it might be nice to see if 
             //  this could use just objects instead of an array, and if Ember supports that.
             //  For now we'll map some local variables, which is an easy speed increase.
-            var scrapsLength = scraps.length,
+            var fileToDelete,
+                fileToDeleteName,
+                fileToDeletePathSegments,
+                scrapsLength = scraps.length,
                 scrapId = scrap.id,
                 i;
 
@@ -48567,19 +48570,14 @@ App.ScrapController = Ember.ObjectController.extend({
                 if (scraps[i].id == scrapId) {
                     //  Match found!
                     //  First I'll need to get just the file name of the image we're about to delete.
-                    //  A regular expression would probably be more efficient but I'm not sure how yet.
-                    var fileToDeletePathSegments = scraps[i].img.split('/');
-                    var fileToDeleteName = fileToDeletePathSegments[fileToDeletePathSegments.length - 1];
-                    console.log("fileToDeleteName = " + fileToDeleteName);
-                    //  And now we delete the actual file and hopefully not screw up anything else
-                    var fileToDelete = Ti.Filesystem.getFile(Ti.Filesystem.getDocumentsDirectory() + '/Pixel Art Scrapbook/Images', fileToDeleteName);
-                    console.log("fileToDelete");
-                    console.log("fileToDelete.nativePath() = " + fileToDelete.nativePath());
-                    console.log("fileToDelete.exists() = " + fileToDelete.exists());
-                    console.dir(fileToDelete);
-
-                    var confirmation = fileToDelete.deleteFile();
-                    console.log("confirmation = " + confirmation);
+                    //  A regular expression would probably be more efficient but I'm not sure how to yet.
+                    fileToDeletePathSegments = scraps[i].img.split('/');
+                    fileToDeleteName = fileToDeletePathSegments[fileToDeletePathSegments.length - 1];
+                    //  And now we delete the actual file and hopefully not screw up anything else.
+                    //  For some reason if I just plug in a string with the full file path (like scrap[i].img)
+                    //  TideSDK has issues and can't delete the file, but this way works.
+                    fileToDelete = Ti.Filesystem.getFile(Ti.Filesystem.getDocumentsDirectory() + '/Pixel Art Scrapbook/Images', fileToDeleteName);
+                    fileToDelete.deleteFile();
                     //  Now that that's out of the way, we can remove it from the array too.
                     scraps.splice(i, 1);
                     //  And now that we've done what we need we can stop iterating through the loop.
