@@ -48,7 +48,12 @@
                 <h2>Add a New Image</h2>
                 {{view App.DragAndDropView targetAction="processImage"}}
                 {{input type="hidden" id="img-data" value=img}}
-                {{textarea class="tags-field" value=tags placeholder="Add tags here, separated by commas"}}
+                <div class="form-unit icon icon-tags">
+                    {{textarea value=tags placeholder="Add tags here, separated by commas"}}
+                </div>
+                <div class="form-unit icon icon-date">
+                    <p>{{formatDate this.dateAdded}}</p>
+                </div>
                 <div class="form-actions">
                     <button class="button" {{action 'add' this}}>Add</button>
                     <button class="button" {{action 'cancel'}}>Cancel</button>
@@ -63,13 +68,23 @@
                 </div>
                 <img {{bind-attr src=this.img}}>
                 {{#if isEditing}}
-                    {{textarea class="tags-field" value=tags placeholder="Add tags here, separated by commas"}}
+                    <div class="form-unit icon icon-tags">
+                        {{textarea value=tags placeholder="Add tags here, separated by commas"}}
+                    </div>
+                    <div class="form-unit icon icon-date">
+                        <p>{{formatDate this.dateAdded}}</p>
+                    </div>
                     <div class="form-actions">
                         <button class="button" {{action 'save' this}}>Save Changes</button>
                         <button class="button" {{action 'cancel' this}}>Cancel</button>
                     </div>
                 {{else}}
-                    <p class="tags-list">{{{sanitizeAndWrapLinks this.tags}}}</p>
+                    <div class="form-unit icon icon-tags">
+                        <p>{{{sanitizeAndWrapLinks this.tags}}}</p>
+                    </div>
+                    <div class="form-unit icon icon-date">
+                        <p>{{formatDate this.dateAdded}}</p>
+                    </div>
                     <div class="form-actions">
                         <button class="button" {{action 'edit' this}}>Edit</button>
                         <button class="button" {{action 'remove' this}}>Delete</button>

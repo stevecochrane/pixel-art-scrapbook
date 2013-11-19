@@ -254,7 +254,10 @@ App.UploadController = Ember.ObjectController.extend({
                 //  Increment the currentMaxID and then use that for this new object, as a String.
                 "id": ++currentMaxID + '',
                 "img": scrap.img,
-                "tags": scrap.tags.replace(/(<([^>]+)>)/ig, '')
+                "tags": scrap.tags.replace(/(<([^>]+)>)/ig, ''),
+                //  Also, get the current date to store as Date Added for the new image.
+                //  This will be stored as a UTC string, which is easy to convert back to a JS Date object later.
+                "dateAdded": (new Date()).toUTCString()
             });
 
             //  Update the local data.js file to reflect the change.
@@ -303,6 +306,15 @@ Ember.Handlebars.helper('sanitizeAndWrapLinks', function(value, options) {
     return new Handlebars.SafeString(valueModified);
 });
 
+//  This takes a UTC string and displays it as "Month Day, Year"
+Ember.Handlebars.helper('formatDate', function(value, options) {
+    //  In the case that there isn't a date value yet (like when a new image is being added)
+    //  just use the current date.
+    var dateObj = value ? new Date(value) : new Date();
+    //  JavaScript's Date object returns a number for the month so here is an array to look up the string equivalent.
+    var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    return monthNames[dateObj.getMonth()] + " " + dateObj.getDate() + ", " + dateObj.getFullYear();
+});
 
 //  Here's where we grab the local database file and get its data array ready for use.
 //  Ajax won't work because you can't use Ajax on 'file://' or 'localhost' due to security restrictions.
