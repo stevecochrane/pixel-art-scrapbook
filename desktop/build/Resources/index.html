@@ -10,7 +10,7 @@
                 {{#each model}}
                     <li class="scrap">
                         {{#link-to 'scrap' this.id}}
-                            <img {{bind-attr src=this.img}}>
+                            <img {{bind-attr src=this.location}}>
                         {{/link-to}}
                     </li>
                 {{/each}}
@@ -20,7 +20,7 @@
                 </div>
                 <h2>Add a New Image</h2>
                 {{view App.DragAndDropView targetAction="processImage"}}
-                {{input type="hidden" id="img-data" value=img}}
+                {{input type="hidden" id="img-data" value=location}}
                 <div class="form-unit icon icon-tags">
                     {{textarea value=tags placeholder="Add tags here, separated by commas"}}
                 </div>
@@ -35,7 +35,7 @@
                 <div class="back-link">
                     {{#link-to 'index'}}&larr; back to all images{{/link-to}}
                 </div>
-                <img {{bind-attr src=this.img}}>
+                <img {{bind-attr src=this.location}}>
                 {{#if isEditing}}
                     <div class="form-unit icon icon-tags">
                         {{textarea value=tags placeholder="Add tags here, separated by commas"}}

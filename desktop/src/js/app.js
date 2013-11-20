@@ -215,10 +215,10 @@ App.ScrapController = Ember.ObjectController.extend({
                     //  Match found!
                     //  First I'll need to get just the file name of the image we're about to delete.
                     //  A regular expression would probably be more efficient but I'm not sure how to yet.
-                    fileToDeletePathSegments = scraps[i].img.split('/');
+                    fileToDeletePathSegments = scraps[i].location.split('/');
                     fileToDeleteName = fileToDeletePathSegments[fileToDeletePathSegments.length - 1];
                     //  And now we delete the actual file and hopefully not screw up anything else.
-                    //  For some reason if I just plug in a string with the full file path (like scrap[i].img)
+                    //  For some reason if I just plug in a string with the full file path (like scrap[i].location)
                     //  TideSDK has issues and can't delete the file, but this way works.
                     fileToDelete = Ti.Filesystem.getFile(Ti.Filesystem.getDocumentsDirectory() + '/Pixel Art Scrapbook/Images', fileToDeleteName);
                     fileToDelete.deleteFile();
@@ -245,15 +245,15 @@ App.UploadController = Ember.ObjectController.extend({
         add: function(scrap) {
 
             //  Apply the hidden image location that we stored in the drop event in App.DragAndDropView
-            //  You can't just use scrap.img = [whatever] here or Ember will throw an error.
+            //  You can't just use scrap.location = [whatever] here or Ember will throw an error.
             //  In order to set a property to an arbitrary value like this, you need to use Ember.set().
-            Ember.set(scrap, 'img', $('#img-data').val());
+            Ember.set(scrap, 'location', $('#img-data').val());
 
             //  Make a new object for the new image and add it to the data array.
             scraps.push({
                 //  Increment the currentMaxID and then use that for this new object, as a String.
                 "id": ++currentMaxID + '',
-                "img": scrap.img,
+                "location": scrap.location,
                 "tags": scrap.tags.replace(/(<([^>]+)>)/ig, ''),
                 //  Also, get the current date to store as Date Added for the new image.
                 //  This will be stored as a UTC string, which is easy to convert back to a JS Date object later.
