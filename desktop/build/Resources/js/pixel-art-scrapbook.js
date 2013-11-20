@@ -48473,25 +48473,18 @@ App.DragAndDropView = Ember.View.extend({
             view.set('isDragActive', false);
             view.set('hasImage', true);
 
-            //  Let's try and create a new directory!
-            //  Make a new Ti.Filesystem.File object for the root directory that will store the images
-            var imagesDir = Ti.Filesystem.getFile(Ti.Filesystem.getDocumentsDirectory(), 'Pixel Art Scrapbook/Images');
-            //  Create that directory if it doesn't already exist
-            imagesDir.createDirectory();
-
-            //  Now let's try to put the newly dropped file in there.
-            //  Since the file they're importing already exists on the hard drive, and since I can get the file's 
-            //  path by checking the (JavaScript) File object, it might be best to just copy it over.
-            //  So, we make a new (TideSDK) File object with the path of file that was just dropped in.
-            var droppedFile = Ti.Filesystem.getFile(event.dataTransfer.files[0].path);
-            //  Then, we copy that file to the data directory.
-            droppedFile.copy(imagesDir);
+            //  Now let's process the image file that was just dropped in.
+            //  We'll want to preview the image on the page, so we'll need access to it, but we also 
+            //  shouldn't save it to the hard drive yet since they haven't saved the new scrap yet.
+            //  So, we'll make a new (TideSDK) File object with the path of the file that was dropped in,
+            //  and we'll save it to a temporary directory for now. If the user saves changes, we'll 
+            //  copy this over to the real images directory later. If the user decides not to use this 
+            //  and cancels, this image and any others in the temp directory will be deleted on quit.
+            droppedFile = Ti.Filesystem.getFile(event.dataTransfer.files[0].path);
+            droppedFile.copy(tempImagesDir);
 
             //  Let's make a string with the path to this copied image
-            droppedFilePath = 'file://localhost' + imagesDir.nativePath() + '/' + droppedFile.name();
-            //  We'll need this path later once the Save button has been pressed, so we'll store that in
-            //  a hidden <input> element for now.
-            $('#img-data').val(droppedFilePath);
+            droppedFilePath = 'file://localhost' + tempImagesDir.nativePath() + '/' + droppedFile.name();
 
             //  Now that we've copied the image over, we can set up the preview to display the copied image.
             //  Get the preview container
@@ -48600,10 +48593,23 @@ App.UploadController = Ember.ObjectController.extend({
     actions: {
         add: function(scrap) {
 
+/*
             //  Apply the hidden image location that we stored in the drop event in App.DragAndDropView
             //  You can't just use scrap.location = [whatever] here or Ember will throw an error.
             //  In order to set a property to an arbitrary value like this, you need to use Ember.set().
             Ember.set(scrap, 'location', $('#img-data').val());
+*/
+
+            console.log("droppedFilePath before: " + droppedFilePath);
+
+            //  Now we'll copy the image to the real images directory so it's stored permanently...
+            droppedFile.copy(imagesDir);
+            //  ...And we'll update droppedFilePath to match the new, permanent location...
+            droppedFilePath = 'file://localhost' + imagesDir.nativePath() + '/' + droppedFile.name();
+            //  ...And we'll add the image location
+            Ember.set(scrap, 'location', droppedFilePath);
+
+            console.log("droppedFilePath after: " + droppedFilePath);
 
             //  Make a new object for the new image and add it to the data array.
             scraps.push({
@@ -48672,6 +48678,9 @@ Ember.Handlebars.helper('formatDate', function(value, options) {
     return monthNames[dateObj.getMonth()] + " " + dateObj.getDate() + ", " + dateObj.getFullYear();
 });
 
+//  FILE SYSTEM INITIALIZATION!
+//  This has a bunch of global variables for now but it'll be in an official function soon.
+
 //  Here's where we grab the local database file and get its data array ready for use.
 //  Ajax won't work because you can't use Ajax on 'file://' or 'localhost' due to security restrictions.
 //  So we'll have to use TideSDK to open a filestream and read the contents that way.
@@ -48691,6 +48700,18 @@ var dataJson = JSON.parse(dataJsonBytes.toString());
 var scraps = dataJson.scraps;
 //  And here is the currentMaxID, which we'll use to make sure each object has a unique ID.
 var currentMaxID = dataJson.currentMaxID;
+
+//  Now we'll initialize the image directory, using a new Ti.Filesystem.File object.
+var imagesDir = Ti.Filesystem.getFile(Ti.Filesystem.getDocumentsDirectory(), 'Pixel Art Scrapbook/Images');
+//  Create that directory if it doesn't already exist.
+imagesDir.createDirectory();
+
+//  And here's another variable that we'll need to reference in a couple places, so it's pulled out in scope here.
+//  It's a cache we'll use for newly-uploaded images so that we can preview them without actually putting them 
+//  on the hard drive until they're saved, using a temporary file.
+var tempImagesDir = Ti.Filesystem.createTempDirectory();
+//  Finally, declare the last dropped file and its path as globals too for wider access.
+var droppedFile, droppedFilePath;
 
 //  When a change is made to the data (add/edit/delete) then call this function to update the local JSON file.
 //  This is pretty basic for now (read: not especially efficient) and all it does is
