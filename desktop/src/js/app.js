@@ -258,9 +258,6 @@ App.UploadController = Ember.ObjectController.extend({
                 Ember.set(scrap, 'tags', '');
             }
 
-            console.log("After: scrap.tags = " + scrap.tags);
-            console.log("After: scrap.tags.replace(/(<([^>]+)>)/ig, '') = " + scrap.tags.replace(/(<([^>]+)>)/ig, ''));
-
             //  Make a new object for the new image and add it to the data array.
             scraps.push({
                 //  Increment the currentMaxID and then use that for this new object, as a String.
