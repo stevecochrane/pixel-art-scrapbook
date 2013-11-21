@@ -32,8 +32,6 @@ App.ApplicationRoute = Ember.Route.extend({
 
 App.IndexRoute = Ember.Route.extend({
     model: function() {
-        console.log("scraps!");
-        console.dir(scraps);
         return scraps;
     }
 });
