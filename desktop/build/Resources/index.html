@@ -6,7 +6,9 @@
             </header>
             <div class="container">
                 {{outlet}}
-            </div></script><script type="text/x-handlebars" data-template-name="index">{{partial 'list'}}</script><script type="text/x-handlebars" data-template-name="search">{{partial 'list'}}</script><script type="text/x-handlebars" data-template-name="_list"><ul>
+            </div></script><script type="text/x-handlebars" data-template-name="index">{{partial 'results'}}
+            {{partial 'list'}}</script><script type="text/x-handlebars" data-template-name="search">{{partial 'results'}}
+            {{partial 'list'}}</script><script type="text/x-handlebars" data-template-name="_results"><p class="results">{{model.length}} {{pluralize model.length 'image' 'images'}}</p></script><script type="text/x-handlebars" data-template-name="_list"><ul>
                 {{#each model}}
                     <li class="scrap">
                         {{#link-to 'scrap' this.id}}

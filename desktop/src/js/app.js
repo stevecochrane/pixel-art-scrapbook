@@ -32,6 +32,8 @@ App.ApplicationRoute = Ember.Route.extend({
 
 App.IndexRoute = Ember.Route.extend({
     model: function() {
+        console.log("scraps!");
+        console.dir(scraps);
         return scraps;
     }
 });
@@ -311,6 +313,13 @@ Ember.Handlebars.helper('formatDate', function(value, options) {
     //  JavaScript's Date object returns a number for the month so here is an array to look up the string equivalent.
     var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     return monthNames[dateObj.getMonth()] + " " + dateObj.getDate() + ", " + dateObj.getFullYear();
+});
+
+//  Handy pluralize function, found here:
+//  http://there4development.com/blog/2012/07/29/handlebars-helpers-for-debugging-and-pluralization/
+//  Usage: {{pluralize collection.length 'quiz' 'quizzes'}}
+Ember.Handlebars.helper('pluralize', function(number, single, plural) {
+    return (number === 1) ? single : plural;
 });
 
 //  FILE SYSTEM INITIALIZATION!

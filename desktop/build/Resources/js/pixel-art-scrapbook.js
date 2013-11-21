@@ -48388,6 +48388,8 @@ App.ApplicationRoute = Ember.Route.extend({
 
 App.IndexRoute = Ember.Route.extend({
     model: function() {
+        console.log("scraps!");
+        console.dir(scraps);
         return scraps;
     }
 });
@@ -48483,7 +48485,7 @@ App.DragAndDropView = Ember.View.extend({
             droppedFile = Ti.Filesystem.getFile(event.dataTransfer.files[0].path);
             droppedFile.copy(tempImagesDir);
 
-            //  Let's make a string with the path to this copied image
+            //  Now we can store a string with the full path to the image.
             droppedFilePath = 'file://localhost' + tempImagesDir.nativePath() + '/' + droppedFile.name();
 
             //  Now that we've copied the image over, we can set up the preview to display the copied image.
@@ -48593,23 +48595,14 @@ App.UploadController = Ember.ObjectController.extend({
     actions: {
         add: function(scrap) {
 
-/*
-            //  Apply the hidden image location that we stored in the drop event in App.DragAndDropView
-            //  You can't just use scrap.location = [whatever] here or Ember will throw an error.
-            //  In order to set a property to an arbitrary value like this, you need to use Ember.set().
-            Ember.set(scrap, 'location', $('#img-data').val());
-*/
-
-            console.log("droppedFilePath before: " + droppedFilePath);
-
             //  Now we'll copy the image to the real images directory so it's stored permanently...
             droppedFile.copy(imagesDir);
             //  ...And we'll update droppedFilePath to match the new, permanent location...
             droppedFilePath = 'file://localhost' + imagesDir.nativePath() + '/' + droppedFile.name();
-            //  ...And we'll add the image location
+            //  ...And finally we'll add the image location to the model so it can be stored.
+            //  Note that you can't just use scrap.location = [whatever] here or Ember will throw an error.
+            //  In order to set a property to an arbitrary value like this, you need to use Ember.set().
             Ember.set(scrap, 'location', droppedFilePath);
-
-            console.log("droppedFilePath after: " + droppedFilePath);
 
             //  Make a new object for the new image and add it to the data array.
             scraps.push({
@@ -48678,6 +48671,13 @@ Ember.Handlebars.helper('formatDate', function(value, options) {
     return monthNames[dateObj.getMonth()] + " " + dateObj.getDate() + ", " + dateObj.getFullYear();
 });
 
+//  Handy pluralize function, found here:
+//  http://there4development.com/blog/2012/07/29/handlebars-helpers-for-debugging-and-pluralization/
+//  Usage: {{pluralize collection.length 'quiz' 'quizzes'}}
+Ember.Handlebars.helper('pluralize', function(number, single, plural) {
+    return (number === 1) ? single : plural;
+});
+
 //  FILE SYSTEM INITIALIZATION!
 //  This has a bunch of global variables for now but it'll be in an official function soon.
 
@@ -48710,7 +48710,7 @@ imagesDir.createDirectory();
 //  It's a cache we'll use for newly-uploaded images so that we can preview them without actually putting them 
 //  on the hard drive until they're saved, using a temporary file.
 var tempImagesDir = Ti.Filesystem.createTempDirectory();
-//  Finally, declare the last dropped file and its path as globals too for wider access.
+//  Finally, declare the last dropped file and its path as globals for wider access.
 var droppedFile, droppedFilePath;
 
 //  When a change is made to the data (add/edit/delete) then call this function to update the local JSON file.

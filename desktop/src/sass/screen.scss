@@ -286,3 +286,9 @@ body > .ember-view {
         background-image: inline-image('date-icon.png');
     }
 }
+.results {
+    font-size: em($small-font-size);
+    line-height: em(20, $small-font-size);
+    margin: 0;
+    padding-left: em(10, $small-font-size);
+}
