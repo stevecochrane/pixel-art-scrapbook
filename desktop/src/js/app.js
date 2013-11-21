@@ -246,6 +246,12 @@ App.UploadController = Ember.ObjectController.extend({
             //  In order to set a property to an arbitrary value like this, you need to use Ember.set().
             Ember.set(scrap, 'location', droppedFilePath);
 
+            //  Now that we're done with them for this image, reset droppedFile and droppedFilePath.
+            //  Otherwise if an image isn't dropped in the next time a scrap is added, the scrap
+            //  would add this previous image by mistake.
+            droppedFile = undefined;
+            droppedFilePath = undefined;
+
             //  Make a new object for the new image and add it to the data array.
             scraps.push({
                 //  Increment the currentMaxID and then use that for this new object, as a String.
