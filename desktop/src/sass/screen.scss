@@ -236,6 +236,9 @@ body > .ember-view {
     background-color: rgba(#8dc63f, 0.2);
     border-color: rgba(#8dc63f, 0.6);
 }
+.dnd-area.error {
+    border-color: red;
+}
 .dnd-area img {
     display: block;
     margin: 0 auto;

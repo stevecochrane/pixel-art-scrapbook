@@ -90,21 +90,23 @@ App.DragAndDropView = Ember.View.extend({
             event.stopPropagation();
             event.preventDefault();
             event.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
-    
+
+            //  Remove the error state if it's currently there.
+            $('.dnd-area').removeClass('error');
             //  Set isDragActive to true to turn the drag and drop area green
             view.set('isDragActive', true);
         },
         dragLeave: function(event, view) {
             event.stopPropagation();
             event.preventDefault();
-    
+
             //  Bring the drag and drop area's appearance back to normal.
             view.set('isDragActive', false);
         },
         dragOver: function(event, view) {
             //  Seems unnecessary but drag and drop won't work in Chrome and Firefox without preventing this event.
             event.stopPropagation();
-            event.preventDefault();        
+            event.preventDefault();
         },
         drop: function(event, view) {
             event.stopPropagation();
@@ -237,43 +239,55 @@ App.UploadController = Ember.ObjectController.extend({
     actions: {
         add: function(scrap) {
 
-            //  Now we'll copy the image to the real images directory so it's stored permanently...
-            droppedFile.copy(imagesDir);
-            //  ...And we'll update droppedFilePath to match the new, permanent location...
-            droppedFilePath = 'file://localhost' + imagesDir.nativePath() + '/' + droppedFile.name();
-            //  ...And finally we'll add the image location to the model so it can be stored.
-            //  Note that you can't just use scrap.location = [whatever] here or Ember will throw an error.
-            //  In order to set a property to an arbitrary value like this, you need to use Ember.set().
-            Ember.set(scrap, 'location', droppedFilePath);
+            //  First check if droppedFile has something, to tell if an image has been dropped in.
+            //  Having an image dropped in is required so we'll make an error state if this is false.
+            if (!droppedFile) {
+                //  The user has not dropped in an image yet.
+                //  All we need to do then is add the error state to the drag and drop area.
+                $('.dnd-area').addClass('error');
 
-            //  Now that we're done with them for this image, reset droppedFile and droppedFilePath.
-            //  Otherwise if an image isn't dropped in the next time a scrap is added, the scrap
-            //  would add this previous image by mistake.
-            droppedFile = undefined;
-            droppedFilePath = undefined;
+            } else {
+                //  The user has dropped in an image, so all required fields are specified.
+                //  Proceed with storing the new image.
 
-            //  Now check if any tags have been provided. Tags are optional, but if they're left blank
-            //  we'll need to make sure we pass along an empty string, not undefined.            
-            if (!Ember.get(scrap, 'tags')) {
-                Ember.set(scrap, 'tags', '');
+                //  Now we'll copy the image to the real images directory so it's stored permanently...
+                droppedFile.copy(imagesDir);
+                //  ...And we'll update droppedFilePath to match the new, permanent location...
+                droppedFilePath = 'file://localhost' + imagesDir.nativePath() + '/' + droppedFile.name();
+                //  ...And finally we'll add the image location to the model so it can be stored.
+                //  Note that you can't just use scrap.location = [whatever] here or Ember will throw an error.
+                //  In order to set a property to an arbitrary value like this, you need to use Ember.set().
+                Ember.set(scrap, 'location', droppedFilePath);
+    
+                //  Now that we're done with them for this image, reset droppedFile and droppedFilePath.
+                //  Otherwise if an image isn't dropped in the next time a scrap is added, the scrap
+                //  would add this previous image by mistake.
+                droppedFile = undefined;
+                droppedFilePath = undefined;
+    
+                //  Now check if any tags have been provided. Tags are optional, but if they're left blank
+                //  we'll need to make sure we pass along an empty string, not undefined.            
+                if (!Ember.get(scrap, 'tags')) {
+                    Ember.set(scrap, 'tags', '');
+                }
+    
+                //  Make a new object for the new image and add it to the data array.
+                scraps.push({
+                    //  Increment the currentMaxID and then use that for this new object, as a String.
+                    "id": ++currentMaxID + '',
+                    "location": scrap.location,
+                    "tags": scrap.tags.replace(/(<([^>]+)>)/ig, ''),
+                    //  Also, get the current date to store as Date Added for the new image.
+                    //  This will be stored as a UTC string, which is easy to convert back to a JS Date object later.
+                    "dateAdded": (new Date()).toUTCString()
+                });
+    
+                //  Update the local data.js file to reflect the change.
+                updateLocalJSON();
+    
+                //  Now we're done, redirect back to the index view.
+                this.transitionToRoute('index');
             }
-
-            //  Make a new object for the new image and add it to the data array.
-            scraps.push({
-                //  Increment the currentMaxID and then use that for this new object, as a String.
-                "id": ++currentMaxID + '',
-                "location": scrap.location,
-                "tags": scrap.tags.replace(/(<([^>]+)>)/ig, ''),
-                //  Also, get the current date to store as Date Added for the new image.
-                //  This will be stored as a UTC string, which is easy to convert back to a JS Date object later.
-                "dateAdded": (new Date()).toUTCString()
-            });
-
-            //  Update the local data.js file to reflect the change.
-            updateLocalJSON();
-
-            //  Now we're done, redirect back to the index view.
-            this.transitionToRoute('index');
 
         },
         cancel: function() {
