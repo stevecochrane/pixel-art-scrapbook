@@ -836,3 +836,9 @@ body > .ember-view {
   margin: 0;
   padding-left: 0.71428571em;
 }
+
+/* line 295, /Users/stevecochrane/Documents/GitHub/pixel-art-scrapbook/desktop/src/sass/screen.scss */
+.no-value {
+  color: rgba(0, 0, 0, 0.35);
+  font-style: italic;
+}

@@ -86,7 +86,11 @@
                     </div>
                 {{else}}
                     <div class="form-unit icon icon-tags">
-                        <p>{{{sanitizeAndWrapLinks this.tags}}}</p>
+                        {{#if this.tags}}
+                            <p>{{{sanitizeAndWrapLinks this.tags}}}</p>
+                        {{else}}
+                            <p class="no-value">No tags provided</p>
+                        {{/if}}
                     </div>
                     <div class="form-unit icon icon-date">
                         <p>{{formatDate this.dateAdded}}</p>

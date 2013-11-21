@@ -292,3 +292,7 @@ body > .ember-view {
     margin: 0;
     padding-left: em(10, $small-font-size);
 }
+.no-value {
+    color: rgba(#000, 0.35);
+    font-style: italic;
+}
