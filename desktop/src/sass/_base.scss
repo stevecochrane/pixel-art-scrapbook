@@ -1,11 +1,20 @@
+//  Font size variables
 $base-font-size: 16;
 $small-font-size: 14;
 $x-small-font-size: 12;
 $base-unit: 24;
 
+//  Color variables
+$base-text-color: #444;
+$light-text-color: #777;
+$lighter-text-color: #aaa;
+$link-color: #6aa8ae;
+
+//  Dimension variables
 $icon-width: 14;
 $icon-height: 14;
 
+//  Math functions
 @function em($px, $base: $base-font-size) {
     @return ($px / $base) * 1em;
 }

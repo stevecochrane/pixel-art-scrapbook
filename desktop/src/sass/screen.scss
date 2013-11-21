@@ -11,7 +11,7 @@ html {
 body {
     background: #eae8e3 inline-image('body-background.png');
     bottom: 0;
-    color: #444;
+    color: $base-text-color;
     font: #{percent($base-font-size, 16)}/#{em($base-unit, $base-font-size)} 'Helvetica Neue', Helvetica, sans-serif;
     left: 0;
     position: absolute;
@@ -41,7 +41,7 @@ a {
 
     &:hover,
     &:focus {
-        color: #6aa8ae;
+        color: $link-color;
     }
 }
 input,
@@ -56,6 +56,9 @@ textarea {
 }
 textarea {
     height: em(($base-unit * 4) - (($base-unit * 0.333333) * 2) - 2, $small-font-size); /* Subtract borders and padding from height to stay on rhythm */
+}
+::-webkit-input-placeholder {
+    color: $lighter-text-color;
 }
 .button {
     @include background(#6118ae linear-gradient(#80b5ba, #57999f));
@@ -197,12 +200,12 @@ body > .ember-view {
     @include pie-clearfix;
 }
 .back-link a {
-    color: rgba(#000, 0.35);
+    color: $lighter-text-color;
     float: left;
 
     &:hover,
     &:focus {
-        color: rgba(#000, 0.7);
+        color: $light-text-color;
     }
 }
 .dnd-area {
@@ -215,7 +218,7 @@ body > .ember-view {
     @include transition(all 0.4s);
 
     &:before {
-        color: #aaa;
+        color: $lighter-text-color;
         content: 'Drag and drop an image here';
         font-size: em(18, $small-font-size);
         left: 50%;
@@ -293,6 +296,6 @@ body > .ember-view {
     padding-left: em(10, $small-font-size);
 }
 .no-value {
-    color: rgba(#000, 0.35);
+    color: $lighter-text-color;
     font-style: italic;
 }
