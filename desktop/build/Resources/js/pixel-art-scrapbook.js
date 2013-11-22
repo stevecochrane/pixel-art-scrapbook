@@ -48728,13 +48728,29 @@ Ember.Handlebars.helper('pluralize', function(number, single, plural) {
 //  FILE SYSTEM INITIALIZATION!
 //  This has a bunch of global variables for now but it'll be in an official function soon.
 
+//  First we'll make the directory structure. If the directories are already there, these do nothing.
+var appDir = Ti.Filesystem.getFile(Ti.Filesystem.getDocumentsDirectory() + '/Pixel Art Scrapbook');
+appDir.createDirectory();
+var imagesDir = Ti.Filesystem.getFile(appDir.nativePath() + '/Images');
+imagesDir.createDirectory();
+var dataDir = Ti.Filesystem.getFile(appDir.nativePath() + '/Data');
+dataDir.createDirectory();
+
 //  Here's where we grab the local database file and get its data array ready for use.
 //  Ajax won't work because you can't use Ajax on 'file://' or 'localhost' due to security restrictions.
 //  So we'll have to use TideSDK to open a filestream and read the contents that way.
 //  First, get a TideSDK file object reference to the actual file.
-var dataJsonFile = Ti.Filesystem.getFile(Ti.Filesystem.getDocumentsDirectory() + '/Pixel Art Scrapbook/Data', 'data.js');
-//  Make a FileStream of the File and open it so we can read the contents.
+var dataJsonFile = Ti.Filesystem.getFile(dataDir.nativePath() + '/data.js');
+//  Then make a reference to the contents of the file.
 var dataJsonFileStream = Ti.Filesystem.getFileStream(dataJsonFile);
+//  If the file doesn't exist yet, or if it does exist but its contents are empty,
+//  then make the file and initialize it with an empty JSON object.
+if (!dataJsonFile.exists() || !dataJsonFile.size()) {
+    dataJsonFileStream.open(Ti.Filesystem.MODE_WRITE);
+    dataJsonFileStream.write('{"currentMaxID":0,"scraps":[]}');
+    dataJsonFileStream.close();
+}
+//  Now open the stream in read mode so we can read the contents.
 dataJsonFileStream.open(Ti.Filesystem.MODE_READ);
 //  Get the data we need by grabbing all of the bytes from the FileStream.
 var dataJsonBytes = dataJsonFileStream.read(dataJsonFile.size());
@@ -48747,11 +48763,6 @@ var dataJson = JSON.parse(dataJsonBytes.toString());
 var scraps = dataJson.scraps;
 //  And here is the currentMaxID, which we'll use to make sure each object has a unique ID.
 var currentMaxID = dataJson.currentMaxID;
-
-//  Now we'll initialize the image directory, using a new Ti.Filesystem.File object.
-var imagesDir = Ti.Filesystem.getFile(Ti.Filesystem.getDocumentsDirectory(), 'Pixel Art Scrapbook/Images');
-//  Create that directory if it doesn't already exist.
-imagesDir.createDirectory();
 
 //  And here's another variable that we'll need to reference in a couple places, so it's pulled out in scope here.
 //  It's a cache we'll use for newly-uploaded images so that we can preview them without actually putting them 
