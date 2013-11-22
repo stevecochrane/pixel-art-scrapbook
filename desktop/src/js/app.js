@@ -192,8 +192,9 @@ App.ScrapController = Ember.ObjectController.extend({
         //  Proceed if the user has just clicked Edit, otherwise (if the clicked Cancel) do nothing.
         if (this.isEditing) {
             //  Use scheduleOnce, or this will be executed immediately, and since the template hasn't 
-            //  changed yet the change in height would not be detected.
-            Ember.run.scheduleOnce('afterRender', this, function () {
+            //  changed yet the change in height would not be detected. As seen here:
+            //  http://stackoverflow.com/a/19228800
+            Ember.run.scheduleOnce('afterRender', this, function() {
                 scrollToBottomOfPage();
             });
         }
