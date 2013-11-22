@@ -48795,7 +48795,6 @@ function scrollToTopOfPage() {
     }
 }
 function scrollToBottomOfPage() {
-    console.log("scrollToBottomOfPage");
     if ($scrollContainer) {
         $scrollContainer.scrollTop($scrollContainer.prop('scrollHeight'));
     }
