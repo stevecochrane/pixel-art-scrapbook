@@ -48377,10 +48377,6 @@ App.Router.map(function() {
     this.resource('upload');
 });
 
-Ember.run.scheduleOnce('afterRender', this, function () {
-    console.log("Woohoo!");
- });
-
 //  For a production-quality app the following getJSON's would be locally stored using
 //  Ember Data to eliminate unnecessary requests.
 
