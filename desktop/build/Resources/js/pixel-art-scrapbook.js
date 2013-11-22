@@ -48377,6 +48377,10 @@ App.Router.map(function() {
     this.resource('upload');
 });
 
+Ember.run.scheduleOnce('afterRender', this, function () {
+    console.log("Woohoo!");
+ });
+
 //  For a production-quality app the following getJSON's would be locally stored using
 //  Ember Data to eliminate unnecessary requests.
 
@@ -48387,33 +48391,18 @@ App.ApplicationRoute = Ember.Route.extend({
 });
 
 App.IndexRoute = Ember.Route.extend({
-    afterModel: function() {
-        //  This is basically my "do this when the user enters this page" event.
-        //  This will make sure we're scrolled to the top when the Index route is loaded.
-        scrollToTopOfPage();
-    },
     model: function() {
         return scraps;
     }
 });
 
 App.ScrapRoute = Ember.Route.extend({
-    afterModel: function() {
-        //  Same as the Index route...
-        //  This will make sure we're scrolled to the top when the Scrap route is loaded.
-        scrollToTopOfPage();
-    },
     model: function(params) {
         return scraps.findBy('id', params.scrap_id);
     }
 });
 
 App.SearchRoute = Ember.Route.extend({
-    afterModel: function() {
-        //  Same as the Index route...
-        //  This will make sure we're scrolled to the top when the Search route is loaded.
-        scrollToTopOfPage();
-    },
     model: function(params) {
         //  Uses regex to return any results that have even a partial match for the search term.
         //  Decode is needed here since if the user has clicked on a tag link or entered the URL manually,
@@ -48426,11 +48415,6 @@ App.SearchRoute = Ember.Route.extend({
 });
 
 App.UploadRoute = Ember.Route.extend({
-    afterModel: function() {
-        //  Same as the Index route...
-        //  This will make sure we're scrolled to the top when the Upload route is loaded.
-        scrollToTopOfPage();
-    },
     model: function() {
         return scraps;
     }
@@ -48520,6 +48504,13 @@ App.DragAndDropView = Ember.View.extend({
 });
 
 App.ApplicationController = Ember.ObjectController.extend({
+
+    //  This is called whenever currentPath is changed, that is to say, when the user enters a new page,
+    //  and we'll call scrollToTopOfPage() to ensure the user always starts at the top.
+    updateCurrentPath: function() {
+        scrollToTopOfPage();
+    }.observes('currentPath'),
+
     actions: {
         search: function(searchTerm) {
             //  Check if something has been entered into the search field.
