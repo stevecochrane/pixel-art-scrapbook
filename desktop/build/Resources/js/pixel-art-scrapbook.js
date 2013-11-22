@@ -48540,6 +48540,21 @@ App.ScrapController = Ember.ObjectController.extend({
     isEditing: false,
     tagsRollback: null,
 
+    //  When the user clicks the edit button it reveals new form controls and expands the height 
+    //  of the page. Normally, if the app window isn't tall enough to show everything, the user 
+    //  would then have to scroll down to see the rest. To prevent this we'll run a function that 
+    //  scrolls down to the bottom of the page automatically when the Edit button is pressed.
+    isEditingDidChange: function() {
+        //  Proceed if the user has just clicked Edit, otherwise (if the clicked Cancel) do nothing.
+        if (this.isEditing) {
+            //  Use scheduleOnce, or this will be executed immediately, and since the template hasn't 
+            //  changed yet the change in height would not be detected.
+            Ember.run.scheduleOnce('afterRender', this, function () {
+                scrollToBottomOfPage();
+            });
+        }
+    }.observes('isEditing'),
+
     actions: {
         edit: function(scrap) {
 
@@ -48779,6 +48794,7 @@ function scrollToTopOfPage() {
     }
 }
 function scrollToBottomOfPage() {
+    console.log("scrollToBottomOfPage");
     if ($scrollContainer) {
         $scrollContainer.scrollTop($scrollContainer.prop('scrollHeight'));
     }
