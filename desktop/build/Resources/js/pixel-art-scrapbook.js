@@ -48387,18 +48387,33 @@ App.ApplicationRoute = Ember.Route.extend({
 });
 
 App.IndexRoute = Ember.Route.extend({
+    afterModel: function() {
+        //  This is basically my "do this when the user enters this page" event.
+        //  This will make sure we're scrolled to the top when the Index route is loaded.
+        scrollToTopOfPage();
+    },
     model: function() {
         return scraps;
     }
 });
 
 App.ScrapRoute = Ember.Route.extend({
+    afterModel: function() {
+        //  Same as the Index route...
+        //  This will make sure we're scrolled to the top when the Scrap route is loaded.
+        scrollToTopOfPage();
+    },
     model: function(params) {
         return scraps.findBy('id', params.scrap_id);
     }
 });
 
 App.SearchRoute = Ember.Route.extend({
+    afterModel: function() {
+        //  Same as the Index route...
+        //  This will make sure we're scrolled to the top when the Search route is loaded.
+        scrollToTopOfPage();
+    },
     model: function(params) {
         //  Uses regex to return any results that have even a partial match for the search term.
         //  Decode is needed here since if the user has clicked on a tag link or entered the URL manually,
@@ -48411,6 +48426,11 @@ App.SearchRoute = Ember.Route.extend({
 });
 
 App.UploadRoute = Ember.Route.extend({
+    afterModel: function() {
+        //  Same as the Index route...
+        //  This will make sure we're scrolled to the top when the Upload route is loaded.
+        scrollToTopOfPage();
+    },
     model: function() {
         return scraps;
     }
@@ -48744,4 +48764,22 @@ function updateLocalJSON() {
     dataJsonFileStream.open(Ti.Filesystem.MODE_WRITE);
     dataJsonFileStream.write('{"currentMaxID":' + currentMaxID + ',"scraps":' + JSON.stringify(scraps) + '}');
     dataJsonFileStream.close();
+}
+
+//  More messy global variables to be cleaned up later, this time for scroll assistance.
+var $scrollContainer;
+
+$(function() {
+    $scrollContainer = $('.container').first();
+});
+
+function scrollToTopOfPage() {
+    if ($scrollContainer) {
+        $scrollContainer.scrollTop(0);
+    }
+}
+function scrollToBottomOfPage() {
+    if ($scrollContainer) {
+        $scrollContainer.scrollTop($scrollContainer.prop('scrollHeight'));
+    }
 }
