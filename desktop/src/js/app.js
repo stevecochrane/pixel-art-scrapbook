@@ -85,12 +85,30 @@ App.DragAndDropView = Ember.View.extend({
     hasImage: false,
     tagName: 'div',
 
+    //  In Windows the event.dataTransfer.effectAllowed property is read-only and set to "none", which means 
+    //  drag and drop isn't allowed and there's no way to change that. Fortunately there is a way around this 
+    //  with the onmouseover event. So we need to have a fork for feature detection. If effectAllowed is 
+    //  "all" that means we can do it the ideal way with the ondrop event (for OS X) and if effectAllowed is 
+    //  "none" then we'll do it the Windows way with onmouseover instead. Credit goes to "si test":
+    //  http://developer.appcelerator.com/question/117783/file-drag-and-drop-in-titanium-desktop#answer-238794
+    effectAllowedWriteable: false,
+    //  These is for the onmouseover method, to indicate when a file is being held over the drop zone.
+    acceptDrop: false,
+    acceptFiles: [],
+
     eventManager: Ember.Object.create({
         dragEnter: function(event, view) {
             event.stopPropagation();
             event.preventDefault();
-            event.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
 
+            //  Feature detection fork as explained above.
+            if (event.dataTransfer.effectAllowed === "all") {
+                view.set('effectAllowedWriteable', true);
+                event.dataTransfer.dropEffect = "copy";
+            } else {
+                view.set('acceptDrop', true);
+                view.get('acceptFiles').push(event.dataTransfer.files[0]);
+            }
             //  Remove the error state if it's currently there.
             $('.dnd-area').removeClass('error');
             //  Set isDragActive to true to turn the drag and drop area green
@@ -112,33 +130,79 @@ App.DragAndDropView = Ember.View.extend({
             event.stopPropagation();
             event.preventDefault();
 
-            //  Get the files that were just dragged and dropped.
-            var files = event.dataTransfer.files; // FileList object.
+            //  Do things the ideal way for OS X.
+            if (view.get('effectAllowedWriteable')) {
+                //  Get the files that were just dragged and dropped.
+                var files = event.dataTransfer.files; // FileList object.
+    
+                //  Remove green highlighting and remove "drag and drop here" text from the upload space
+                view.set('isDragActive', false);
+                view.set('hasImage', true);
+    
+                //  Now let's process the image file that was just dropped in.
+                //  We'll want to preview the image on the page, so we'll need access to it, but we also 
+                //  shouldn't save it to the hard drive yet since they haven't saved the new scrap yet.
+                //  So, we'll make a new (TideSDK) File object with the path of the file that was dropped in,
+                //  and we'll save it to a temporary directory for now. If the user saves changes, we'll 
+                //  copy this over to the real images directory later. If the user decides not to use this 
+                //  and cancels, this image and any others in the temp directory will be deleted on quit.
+                droppedFile = Ti.Filesystem.getFile(event.dataTransfer.files[0].path);
+                droppedFile.copy(tempImagesDir);
+    
+                //  Now we can store a string with the full path to the image.
+                droppedFilePath = 'file://localhost' + tempImagesDir.nativePath() + '/' + droppedFile.name();
+    
+                //  Now that we've copied the image over, we can set up the preview to display the copied image.
+                //  Get the preview container
+                $('#' + view.get('elementId'))
+                    //  Empty its contents (in case there is already an image being previewed)
+                    .empty()
+                    //  Then, append a new preview of the image that was just dropped in
+                    .append('<img src="' + droppedFilePath + '">');
+            }
+        },
+        mouseOut: function(event, view) {
+            event.stopPropagation();
+            event.preventDefault();
 
-            //  Remove green highlighting and remove "drag and drop here" text from the upload space
-            view.set('isDragActive', false);
-            view.set('hasImage', true);
+            //  This is for the onmouseover/Windows method.
+            //  Cancel the drop since the file has left the drop zone.
+            view.set('acceptDrop', false);
+        },
+        mouseEnter: function(event, view) {
+            event.stopPropagation();
+            event.preventDefault();
 
-            //  Now let's process the image file that was just dropped in.
-            //  We'll want to preview the image on the page, so we'll need access to it, but we also 
-            //  shouldn't save it to the hard drive yet since they haven't saved the new scrap yet.
-            //  So, we'll make a new (TideSDK) File object with the path of the file that was dropped in,
-            //  and we'll save it to a temporary directory for now. If the user saves changes, we'll 
-            //  copy this over to the real images directory later. If the user decides not to use this 
-            //  and cancels, this image and any others in the temp directory will be deleted on quit.
-            droppedFile = Ti.Filesystem.getFile(event.dataTransfer.files[0].path);
-            droppedFile.copy(tempImagesDir);
+            //  This is for the onmouseover/Windows method.
+            if (view.get('acceptDrop')) {
+                view.set('acceptDrop', false);
+                //  Once the user lets go of the dragged files, this event is triggered,
+                //  so we treat this like it was the ondrop event.
+                //  Remove green highlighting and remove "drag and drop here" text from the upload space
+                view.set('isDragActive', false);
+                view.set('hasImage', true);
 
-            //  Now we can store a string with the full path to the image.
-            droppedFilePath = 'file://localhost' + tempImagesDir.nativePath() + '/' + droppedFile.name();
+                //  Now let's process the image file that was just dropped in.
+                //  We'll want to preview the image on the page, so we'll need access to it, but we also 
+                //  shouldn't save it to the hard drive yet since they haven't saved the new scrap yet.
+                //  So, we'll make a new (TideSDK) File object with the path of the file that was dropped in,
+                //  and we'll save it to a temporary directory for now. If the user saves changes, we'll 
+                //  copy this over to the real images directory later. If the user decides not to use this 
+                //  and cancels, this image and any others in the temp directory will be deleted on quit.
+                droppedFile = Ti.Filesystem.getFile(view.get('acceptFiles')[0].path);
+                droppedFile.copy(tempImagesDir);
 
-            //  Now that we've copied the image over, we can set up the preview to display the copied image.
-            //  Get the preview container
-            $('#' + view.get('elementId'))
-                //  Empty its contents (in case there is already an image being previewed)
-                .empty()
-                //  Then, append a new preview of the image that was just dropped in
-                .append('<img src="' + droppedFilePath + '">');
+                //  Now we can store a string with the full path to the image.
+                droppedFilePath = 'file://localhost' + tempImagesDir.nativePath() + '/' + droppedFile.name();
+
+                //  Now that we've copied the image over, we can set up the preview to display the copied image.
+                //  Get the preview container
+                $('#' + view.get('elementId'))
+                    //  Empty its contents (in case there is already an image being previewed)
+                    .empty()
+                    //  Then, append a new preview of the image that was just dropped in
+                    .append('<img src="' + droppedFilePath + '">');
+            }
         }
     })
 });
