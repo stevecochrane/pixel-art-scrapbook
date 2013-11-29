@@ -48426,13 +48426,6 @@ App.SearchTextField = Ember.TextField.extend({
 });
 
 App.DragAndDropView = Ember.View.extend({
-    //  Drag and drop scripting is a combination of the following;
-    //  Getting the FileList from a drag and drop: http://www.html5rocks.com/en/tutorials/file/dndfiles/
-    //  Converting a file to base64: http://jsbin.com/ayazin/49/
-
-    //  Generally, storing and serving all of the images for this app in base64 would be a bad idea
-    //  since base64-encoded images are typically 33% larger. I just did it this way for this prototype
-    //  since it was the fastest to implement.
 
     //  This will bind the elements class to the isDragActive variable on the view.
     //  If isDragActive is true, the class "drag-active" will be added. If false, the class is removed.
@@ -48442,98 +48435,53 @@ App.DragAndDropView = Ember.View.extend({
     tagName: 'div',
 
     //  In Windows the event.dataTransfer.effectAllowed property is read-only and set to "none", which means 
-    //  drag and drop isn't allowed and there's no way to change that. Fortunately there is a way around this 
-    //  with the onmouseover event. So we need to have a fork for feature detection. If effectAllowed is 
-    //  "all" that means we can do it the ideal way with the ondrop event (for OS X) and if effectAllowed is 
-    //  "none" then we'll do it the Windows way with onmouseover instead. Credit goes to "si test":
+    //  drag and drop isn't allowed and there's no way to change that. This isn't always the case, but in the 
+    //  out-of-date verson of WebKit that TideSDK uses it is. Fortunately there is a way around this 
+    //  with the mouseOver event, but Ember doesn't support mouseOver in its eventManager object, but
+    //  fortunately again, Ember *does* support the mouseEnter event, and that also works in this case.
+    //  Adding further to the complications here, I would have liked to fork by feature and handle things the 
+    //  ideal way with actual drag and drop events in OS X, but when you add the drop, dragOver, and dragLeave 
+    //  events and cancel their defaults (which is necessary to make it work) then Windows decides to put a 
+    //  'not supported' (red circle with line over it) icon over the file, which would make it look like drag 
+    //  and drop was not supported even though it is. And that's the story of the following code.
+
+    //  Credit for the mouseOver drag and drop method goes to "si test":
     //  http://developer.appcelerator.com/question/117783/file-drag-and-drop-in-titanium-desktop#answer-238794
-    effectAllowedWriteable: false,
-    //  These is for the onmouseover method, to indicate when a file is being held over the drop zone.
+
     acceptDrop: false,
-    acceptFiles: [],
+    acceptFile: false,
 
     eventManager: Ember.Object.create({
         dragEnter: function(event, view) {
             event.stopPropagation();
             event.preventDefault();
 
-            //  Feature detection fork as explained above.
-            if (event.dataTransfer.effectAllowed === "all") {
-                view.set('effectAllowedWriteable', true);
-                event.dataTransfer.dropEffect = "copy";
-            } else {
-                view.set('acceptDrop', true);
-                view.get('acceptFiles').push(event.dataTransfer.files[0]);
-            }
+            //  We're starting a drop, set the flag to true so mouseEnter can process the drop.
+            view.set('acceptDrop', true);
+            //  Store a reference to the file that the user is about to drop.
+            view.set('acceptFile', event.dataTransfer.files[0]);
             //  Remove the error state if it's currently there.
             $('.dnd-area').removeClass('error');
-            //  Set isDragActive to true to turn the drag and drop area green
+            //  Set isDragActive to true to turn the drag and drop area green.
             view.set('isDragActive', true);
-        },
-        dragLeave: function(event, view) {
-            event.stopPropagation();
-            event.preventDefault();
-
-            //  Bring the drag and drop area's appearance back to normal.
-            view.set('isDragActive', false);
-        },
-        dragOver: function(event, view) {
-            //  Seems unnecessary but drag and drop won't work in Chrome and Firefox without preventing this event.
-            event.stopPropagation();
-            event.preventDefault();
-        },
-        drop: function(event, view) {
-            event.stopPropagation();
-            event.preventDefault();
-
-            //  Do things the ideal way for OS X.
-            if (view.get('effectAllowedWriteable')) {
-                //  Get the files that were just dragged and dropped.
-                var files = event.dataTransfer.files; // FileList object.
-    
-                //  Remove green highlighting and remove "drag and drop here" text from the upload space
-                view.set('isDragActive', false);
-                view.set('hasImage', true);
-    
-                //  Now let's process the image file that was just dropped in.
-                //  We'll want to preview the image on the page, so we'll need access to it, but we also 
-                //  shouldn't save it to the hard drive yet since they haven't saved the new scrap yet.
-                //  So, we'll make a new (TideSDK) File object with the path of the file that was dropped in,
-                //  and we'll save it to a temporary directory for now. If the user saves changes, we'll 
-                //  copy this over to the real images directory later. If the user decides not to use this 
-                //  and cancels, this image and any others in the temp directory will be deleted on quit.
-                droppedFile = Ti.Filesystem.getFile(event.dataTransfer.files[0].path);
-                droppedFile.copy(tempImagesDir);
-    
-                //  Now we can store a string with the full path to the image.
-                droppedFilePath = 'file://localhost' + tempImagesDir.nativePath() + '/' + droppedFile.name();
-    
-                //  Now that we've copied the image over, we can set up the preview to display the copied image.
-                //  Get the preview container
-                $('#' + view.get('elementId'))
-                    //  Empty its contents (in case there is already an image being previewed)
-                    .empty()
-                    //  Then, append a new preview of the image that was just dropped in
-                    .append('<img src="' + droppedFilePath + '">');
-            }
         },
         mouseOut: function(event, view) {
             event.stopPropagation();
             event.preventDefault();
 
-            //  This is for the onmouseover/Windows method.
             //  Cancel the drop since the file has left the drop zone.
             view.set('acceptDrop', false);
+            view.set('acceptFile', false);
         },
         mouseEnter: function(event, view) {
             event.stopPropagation();
             event.preventDefault();
 
-            //  This is for the onmouseover/Windows method.
+            //  Normally when you move the mouse over the drag and drop area this event fires right away,
+            //  but if you are dragging a file it will fire the event as soon as you drop the file.
+            //  We'll check acceptDrop to know which case it is and only proceed if there is a file.
             if (view.get('acceptDrop')) {
                 view.set('acceptDrop', false);
-                //  Once the user lets go of the dragged files, this event is triggered,
-                //  so we treat this like it was the ondrop event.
                 //  Remove green highlighting and remove "drag and drop here" text from the upload space
                 view.set('isDragActive', false);
                 view.set('hasImage', true);
@@ -48545,7 +48493,7 @@ App.DragAndDropView = Ember.View.extend({
                 //  and we'll save it to a temporary directory for now. If the user saves changes, we'll 
                 //  copy this over to the real images directory later. If the user decides not to use this 
                 //  and cancels, this image and any others in the temp directory will be deleted on quit.
-                droppedFile = Ti.Filesystem.getFile(view.get('acceptFiles')[0].path);
+                droppedFile = Ti.Filesystem.getFile(view.get('acceptFile').path);
                 droppedFile.copy(tempImagesDir);
 
                 //  Now we can store a string with the full path to the image.
@@ -48558,6 +48506,9 @@ App.DragAndDropView = Ember.View.extend({
                     .empty()
                     //  Then, append a new preview of the image that was just dropped in
                     .append('<img src="' + droppedFilePath + '">');
+
+                //  Empty out acceptFile for next time.
+                view.set('acceptFile', false);
             }
         }
     })
