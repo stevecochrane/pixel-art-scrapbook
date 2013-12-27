@@ -13,12 +13,12 @@
 <id>initial</id>
 <title>Pixel Art Scrapbook</title>
 <url>app://index.html</url>
-<width>1200</width>
-<max-width>3000</max-width>
-<min-width>0</min-width>
-<height>800</height>
-<max-height>3000</max-height>
-<min-height>0</min-height>
+<width>951</width>
+<max-width>-1</max-width>
+<min-width>-1</min-width>
+<height>601</height>
+<max-height>-1</max-height>
+<min-height>-1</min-height>
 <fullscreen>false</fullscreen>
 <resizable>true</resizable>
 <chrome scrollbars="true">true</chrome>
