@@ -852,3 +852,36 @@ body > .ember-view {
   color: #aaaaaa;
   font-style: italic;
 }
+
+/* line 305, /Users/stevecochrane/Documents/GitHub/pixel-art-scrapbook/desktop/src/sass/screen.scss */
+.align-center {
+  /*  I would love to use flexbox here but TideSDK has an old version of WebKit that doesn't support it. */
+  bottom: 1.875em;
+  display: table;
+  height: 100%;
+  left: 1.25em;
+  position: absolute;
+  right: 1.25em;
+  top: 0.625em;
+  width: 100%;
+}
+
+/* line 316, /Users/stevecochrane/Documents/GitHub/pixel-art-scrapbook/desktop/src/sass/screen.scss */
+.align-content {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+}
+
+/* line 321, /Users/stevecochrane/Documents/GitHub/pixel-art-scrapbook/desktop/src/sass/screen.scss */
+.message-box {
+  background: #fff;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+  margin: 0 auto;
+  max-width: 50%;
+  text-align: center;
+}

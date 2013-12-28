@@ -7,8 +7,28 @@
             <div class="container">
                 {{outlet}}
             </div></script><script type="text/x-handlebars" data-template-name="index">{{partial 'results'}}
-            {{partial 'list'}}</script><script type="text/x-handlebars" data-template-name="search">{{partial 'results'}}
-            {{partial 'list'}}</script><script type="text/x-handlebars" data-template-name="_results"><p class="results">{{model.length}} {{pluralize model.length 'image' 'images'}}</p></script><script type="text/x-handlebars" data-template-name="_list"><ul>
+            {{partial 'list'}}</script><script type="text-x-handlebars" data-template-name="index-new">{{#if model}}
+                {{partial 'results'}}
+                {{partial 'list'}}
+            {{else}}
+                <h1>Welcome to Scrapyard</h1>
+                <p>This is where tons of inspiring images will go. All you have to do is drop them in and add some tags so it's easy to look them up later. Let's get started and add your first!</p>
+            {{/if}}</script><script type="text/x-handlebars" data-template-name="search">{{partial 'results'}}
+            {{#if model}}
+                {{partial 'list'}}
+            {{else}}
+                {{!--
+                    I don't understand this but if divs are used here instead of spans, Ember (or Handlebars) 
+                    will have trouble replacing the divs after running multiple searches. The divs will remain 
+                    in the page and yet the new content will be inside the divs, resulting in mixed content 
+                    with major visual issues. Spans work fine though, for some reason.
+                --}}
+                <span class="align-center">
+                    <span class="align-content">
+                        <h1>No results found.</h1>
+                    </span>
+                </span>
+            {{/if}}</script><script type="text/x-handlebars" data-template-name="_results"><p class="results">{{model.length}} {{pluralize model.length 'image' 'images'}}</p></script><script type="text/x-handlebars" data-template-name="_list"><ul>
                 {{#each model}}
                     <li class="scrap">
                         {{#link-to 'scrap' this.id}}

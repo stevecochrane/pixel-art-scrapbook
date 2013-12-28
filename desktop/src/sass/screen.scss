@@ -302,3 +302,26 @@ body > .ember-view {
     color: $lighter-text-color;
     font-style: italic;
 }
+.align-center {
+    /*  I would love to use flexbox here but TideSDK has an old version of WebKit that doesn't support it. */
+    bottom: em(30, $base-font-size);
+    display: table;
+    height: 100%;
+    left: em(20, $base-font-size);
+    position: absolute;
+    right: em(20, $base-font-size);
+    top: em(10, $base-font-size);
+    width: 100%;
+}
+.align-content {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
+.message-box {
+    background: #fff;
+    @include border-radius(5px);
+    margin: 0 auto;
+    max-width: 50%;
+    text-align: center;
+}
