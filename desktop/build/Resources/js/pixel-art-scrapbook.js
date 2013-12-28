@@ -48429,7 +48429,7 @@ App.DragAndDropView = Ember.View.extend({
 
     //  This will bind the elements class to the isDragActive variable on the view.
     //  If isDragActive is true, the class "drag-active" will be added. If false, the class is removed.
-    classNameBindings: [':dnd-area', 'isDragActive:drag-active', 'hasImage:has-image'],
+    classNameBindings: [':dnd-area', 'isDragActive:dnd-area-active', 'hasImage:dnd-area-has-image'],
     isDragActive: false,
     hasImage: false,
     tagName: 'div',
@@ -48456,14 +48456,22 @@ App.DragAndDropView = Ember.View.extend({
             event.stopPropagation();
             event.preventDefault();
 
-            //  We're starting a drop, set the flag to true so mouseEnter can process the drop.
-            view.set('acceptDrop', true);
-            //  Store a reference to the file that the user is about to drop.
-            view.set('acceptFile', event.dataTransfer.files[0]);
-            //  Remove the error state if it's currently there.
-            $('.dnd-area').removeClass('error');
-            //  Set isDragActive to true to turn the drag and drop area green.
-            view.set('isDragActive', true);
+            //  First, make sure only one file is being dropped at a time. I'd like to support 
+            //  multiple files at once later one but for now it's just one at a time.
+            if (event.dataTransfer.files.length === 1) {
+                //  We're starting a drop, set the flag to true so mouseEnter can process the drop.
+                view.set('acceptDrop', true);
+                //  Store a reference to the file that the user is about to drop.
+                view.set('acceptFile', event.dataTransfer.files[0]);
+                //  Remove the error state if it's currently there.
+                $('.dnd-area').removeClass('dnd-area-error dnd-area-error-multiple');
+                //  Set isDragActive to true to turn the drag and drop area green.
+                view.set('isDragActive', true);
+            } else {
+                //  If more than one was dragged in, remove isDragActive and show an error message for now.
+                view.set('isDragActive', false);
+                $('.dnd-area').addClass('dnd-area-error dnd-area-error-multiple');
+            }
         },
         mouseOut: function(event, view) {
             event.stopPropagation();
@@ -48638,7 +48646,7 @@ App.UploadController = Ember.ObjectController.extend({
             if (!droppedFile) {
                 //  The user has not dropped in an image yet.
                 //  All we need to do then is add the error state to the drag and drop area.
-                $('.dnd-area').addClass('error');
+                $('.dnd-area').addClass('dnd-area-error');
 
             } else {
                 //  The user has dropped in an image, so all required fields are specified.

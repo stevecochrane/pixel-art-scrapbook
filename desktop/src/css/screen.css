@@ -752,34 +752,39 @@ body > .ember-view {
   width: 50%;
 }
 
-/* line 232, /Users/stevecochrane/Documents/GitHub/pixel-art-scrapbook/desktop/src/sass/screen.scss */
-.dnd-area.has-image:before {
+/* line 234, /Users/stevecochrane/Documents/GitHub/pixel-art-scrapbook/desktop/src/sass/screen.scss */
+.dnd-area-has-image:before {
   content: '';
 }
 
-/* line 235, /Users/stevecochrane/Documents/GitHub/pixel-art-scrapbook/desktop/src/sass/screen.scss */
-.dnd-area.drag-active {
+/* line 238, /Users/stevecochrane/Documents/GitHub/pixel-art-scrapbook/desktop/src/sass/screen.scss */
+.dnd-area-active {
   background-color: rgba(141, 198, 63, 0.2);
   border-color: rgba(141, 198, 63, 0.6);
 }
 
-/* line 239, /Users/stevecochrane/Documents/GitHub/pixel-art-scrapbook/desktop/src/sass/screen.scss */
-.dnd-area.error {
+/* line 242, /Users/stevecochrane/Documents/GitHub/pixel-art-scrapbook/desktop/src/sass/screen.scss */
+.dnd-area-error {
   border-color: red;
 }
 
-/* line 242, /Users/stevecochrane/Documents/GitHub/pixel-art-scrapbook/desktop/src/sass/screen.scss */
+/* line 247, /Users/stevecochrane/Documents/GitHub/pixel-art-scrapbook/desktop/src/sass/screen.scss */
+.dnd-area-error-multiple:before {
+  content: 'Sorry, only one image at a time. (For now.)';
+}
+
+/* line 251, /Users/stevecochrane/Documents/GitHub/pixel-art-scrapbook/desktop/src/sass/screen.scss */
 .dnd-area img {
   display: block;
   margin: 0 auto;
 }
 
-/* line 246, /Users/stevecochrane/Documents/GitHub/pixel-art-scrapbook/desktop/src/sass/screen.scss */
+/* line 255, /Users/stevecochrane/Documents/GitHub/pixel-art-scrapbook/desktop/src/sass/screen.scss */
 .form-unit {
   margin: 0.85714286em 0;
 }
 
-/* line 250, /Users/stevecochrane/Documents/GitHub/pixel-art-scrapbook/desktop/src/sass/screen.scss */
+/* line 259, /Users/stevecochrane/Documents/GitHub/pixel-art-scrapbook/desktop/src/sass/screen.scss */
 .form-unit > input,
 .form-unit > textarea {
   margin-bottom: -0.28571486em;
@@ -787,35 +792,35 @@ body > .ember-view {
   top: -0.28571486em;
 }
 
-/* line 255, /Users/stevecochrane/Documents/GitHub/pixel-art-scrapbook/desktop/src/sass/screen.scss */
+/* line 264, /Users/stevecochrane/Documents/GitHub/pixel-art-scrapbook/desktop/src/sass/screen.scss */
 .form-unit > p {
   line-height: 1.42857086em;
   margin: 0;
   padding: 0.14285657em 0;
 }
 
-/* line 260, /Users/stevecochrane/Documents/GitHub/pixel-art-scrapbook/desktop/src/sass/screen.scss */
+/* line 269, /Users/stevecochrane/Documents/GitHub/pixel-art-scrapbook/desktop/src/sass/screen.scss */
 .form-unit + .form-unit {
   margin-top: -0.28571486em;
   /* -4px, effective margin between both elements then being 8px */
 }
 
-/* line 263, /Users/stevecochrane/Documents/GitHub/pixel-art-scrapbook/desktop/src/sass/screen.scss */
+/* line 272, /Users/stevecochrane/Documents/GitHub/pixel-art-scrapbook/desktop/src/sass/screen.scss */
 .form-actions {
   padding: 1.42857143em 0 0.57142857em;
 }
 
-/* line 266, /Users/stevecochrane/Documents/GitHub/pixel-art-scrapbook/desktop/src/sass/screen.scss */
+/* line 275, /Users/stevecochrane/Documents/GitHub/pixel-art-scrapbook/desktop/src/sass/screen.scss */
 .form-actions > .button {
   margin-right: 0.5em;
 }
 
-/* line 269, /Users/stevecochrane/Documents/GitHub/pixel-art-scrapbook/desktop/src/sass/screen.scss */
+/* line 278, /Users/stevecochrane/Documents/GitHub/pixel-art-scrapbook/desktop/src/sass/screen.scss */
 .icon {
   padding-left: 1.57142857em;
   position: relative;
 }
-/* line 273, /Users/stevecochrane/Documents/GitHub/pixel-art-scrapbook/desktop/src/sass/screen.scss */
+/* line 282, /Users/stevecochrane/Documents/GitHub/pixel-art-scrapbook/desktop/src/sass/screen.scss */
 .icon:before {
   background-position: 0 50%;
   background-repeat: no-repeat;
@@ -829,17 +834,17 @@ body > .ember-view {
   width: 14px;
 }
 
-/* line 286, /Users/stevecochrane/Documents/GitHub/pixel-art-scrapbook/desktop/src/sass/screen.scss */
+/* line 295, /Users/stevecochrane/Documents/GitHub/pixel-art-scrapbook/desktop/src/sass/screen.scss */
 .icon-tags:before {
   background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAAbUlEQVR42pXLsQmAMBRF0aR3BwVx3DSaCSzcQ53DKSxT6PuFfPBp4BUXbnNC33Z/RZRQQders4byB1jQYa8ga0AzQUKVRORpyCsa8pLBUUQZRYOrilAw2KBdQQ8kXEcOCVcQQ8aMGDLe0OSIuwGn/b3ks9QXYwAAAABJRU5ErkJggg==');
 }
 
-/* line 291, /Users/stevecochrane/Documents/GitHub/pixel-art-scrapbook/desktop/src/sass/screen.scss */
+/* line 300, /Users/stevecochrane/Documents/GitHub/pixel-art-scrapbook/desktop/src/sass/screen.scss */
 .icon-date:before {
   background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3NpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDE0IDc5LjE1MTQ4MSwgMjAxMy8wMy8xMy0xMjowOToxNSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo4NWZkNjFmNS0xOGIyLTRlOGYtYjg0My0zNWI2YmIzYmY5YzYiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QkUwQzcxN0E0OEQ0MTFFMzk2NTZDM0NFQzE0NDU2NkQiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QkUwQzcxNzk0OEQ0MTFFMzk2NTZDM0NFQzE0NDU2NkQiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChNYWNpbnRvc2gpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6ODVmZDYxZjUtMThiMi00ZThmLWI4NDMtMzViNmJiM2JmOWM2IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjg1ZmQ2MWY1LTE4YjItNGU4Zi1iODQzLTM1YjZiYjNiZjljNiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PnkpoxcAAADLSURBVHjaYmRABcJAnATEbkCsABV7AMS7gHgeEL9lwAK8gfgmED8D4rtAvAOK70LFbkLVYGh6CsS3gDgeiDmQ5DigYregaryRnXcTKqGFpEETiLOQ+FpQNTehehjKoE6JR3NFIBBvQBOLh6otZYIGxHcgXslAGKyEqnUDaZQH4ttA/IMIjT+gahWY8Cj6DcTa0JBdiiTOCCJYoPGkCg09ZFu3Q8VA+ANSCKsA8T0QpxRH4GAD8MDBFx3oACM6yE4AZCU5RnITOUCAAQA8Jz+F5xzCOAAAAABJRU5ErkJggg==');
 }
 
-/* line 295, /Users/stevecochrane/Documents/GitHub/pixel-art-scrapbook/desktop/src/sass/screen.scss */
+/* line 304, /Users/stevecochrane/Documents/GitHub/pixel-art-scrapbook/desktop/src/sass/screen.scss */
 .results {
   font-size: 0.875em;
   line-height: 1.42857143em;
@@ -847,13 +852,13 @@ body > .ember-view {
   padding-left: 0.71428571em;
 }
 
-/* line 301, /Users/stevecochrane/Documents/GitHub/pixel-art-scrapbook/desktop/src/sass/screen.scss */
+/* line 310, /Users/stevecochrane/Documents/GitHub/pixel-art-scrapbook/desktop/src/sass/screen.scss */
 .no-value {
   color: #aaaaaa;
   font-style: italic;
 }
 
-/* line 305, /Users/stevecochrane/Documents/GitHub/pixel-art-scrapbook/desktop/src/sass/screen.scss */
+/* line 314, /Users/stevecochrane/Documents/GitHub/pixel-art-scrapbook/desktop/src/sass/screen.scss */
 .align-center {
   /*  I would love to use flexbox here but TideSDK has an old version of WebKit that doesn't support it. */
   bottom: 1.875em;
@@ -866,14 +871,14 @@ body > .ember-view {
   width: 100%;
 }
 
-/* line 316, /Users/stevecochrane/Documents/GitHub/pixel-art-scrapbook/desktop/src/sass/screen.scss */
+/* line 325, /Users/stevecochrane/Documents/GitHub/pixel-art-scrapbook/desktop/src/sass/screen.scss */
 .align-content {
   display: table-cell;
   vertical-align: middle;
   text-align: center;
 }
 
-/* line 321, /Users/stevecochrane/Documents/GitHub/pixel-art-scrapbook/desktop/src/sass/screen.scss */
+/* line 330, /Users/stevecochrane/Documents/GitHub/pixel-art-scrapbook/desktop/src/sass/screen.scss */
 .message-box {
   background: #fff;
   -webkit-border-radius: 5px;

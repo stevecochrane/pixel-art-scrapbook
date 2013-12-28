@@ -229,15 +229,24 @@ body > .ember-view {
         width: 50%;
     }
 }
-.dnd-area.has-image:before {
-    content: '';
+.dnd-area-has-image {
+
+    &:before {
+        content: '';
+    }
 }
-.dnd-area.drag-active {
+.dnd-area-active {
     background-color: rgba(#8dc63f, 0.2);
     border-color: rgba(#8dc63f, 0.6);
 }
-.dnd-area.error {
+.dnd-area-error {
     border-color: red;
+}
+.dnd-area-error-multiple {
+
+    &:before {
+        content: 'Sorry, only one image at a time. (For now.)';
+    }
 }
 .dnd-area img {
     display: block;
